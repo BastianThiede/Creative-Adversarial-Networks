@@ -66,10 +66,9 @@ def CAN_loss(model):
       model.G_sum, model.d_loss_fake_sum, model.g_loss_sum])
 
     model.g_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
-    grads_g = model.g_opt.compute_gradients(model.g_loss)
+    #grads_g = model.g_opt.compute_gradients(model.g_loss)
 
-    grad_summ_op = tf.summary.merge([tf.summary.histogram("%s-grad" % g[1].name, g[0])
-                                     for g in grads_g])
+    grad_summ_op = None
 
     model.d_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
 
