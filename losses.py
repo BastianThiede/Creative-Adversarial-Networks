@@ -94,13 +94,16 @@ def GAN_loss(model):
     false_label = tf.random_uniform(tf.shape(model.D_), 0.0, 0.3)
 
     model.d_loss_real = tf.reduce_mean(
-      sigmoid_cross_entropy_with_logits(model.D_logits, true_label * tf.ones_like(model.D)))
+      sigmoid_cross_entropy_with_logits(tf.clip_by_values(model.D_logits,1e-10,1.0),
+                                        true_label * tf.ones_like(model.D)))
 
     model.d_loss_fake = tf.reduce_mean(
-            sigmoid_cross_entropy_with_logits(model.D_logits_, false_label * tf.ones_like(model.D_)))
+            sigmoid_cross_entropy_with_logits(tf.clip_by_values(model.D_logits_,1e-10,1.0),
+                                              false_label * tf.ones_like(model.D_)))
 
     model.g_loss = tf.reduce_mean(
-      sigmoid_cross_entropy_with_logits(model.D_logits_, tf.ones_like(model.D_)))
+      sigmoid_cross_entropy_with_logits(tf.clip_by_values(model.D_logits_, 1e-10, 1.0),
+                                        tf.ones_like(model.D_)))
     model.d_loss = model.d_loss_real + model.d_loss_fake
 
     model.d_sum = histogram_summary("d", model.D)
