@@ -33,7 +33,7 @@ def CAN_loss(model):
                                         true_label * tf.ones_like(model.D)))
 
     model.d_loss_fake = tf.reduce_mean(
-      sigmoid_cross_entropy_with_logits(tf.where(tf.equal(model.D_logits_,0),1e-10,model.D_logits_),
+      sigmoid_cross_entropy_with_logits(tf.where(tf.equal(model.D_logits_,0),1e-10 * tf.ones_like(model.D_logits_),model.D_logits_),
                                         false_label * tf.ones_like(model.D_)))
 
     model.d_loss_class_real = tf.reduce_mean(
