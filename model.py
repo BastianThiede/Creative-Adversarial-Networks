@@ -305,7 +305,7 @@ class DCGAN(object):
           print(batch_z.mean(axis=1))
           print('Batch_z')
           from collections import Counter
-          print(Counter(batch_labels))
+          print(Counter(batch_labels.argmax(axis=1).tolist()))
           _, summary_str = self.sess.run([self.d_update, self.sums[0]],
             feed_dict={
               self.inputs: batch_images,
