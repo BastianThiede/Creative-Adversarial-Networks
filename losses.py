@@ -55,12 +55,12 @@ def CAN_loss(model):
 
     model.d_loss = model.d_loss_real + model.d_loss_class_real + model.d_loss_fake
     model.g_loss = model.g_loss_fake + model.lamb * model.g_loss_class_fake
-1
-     model.d_loss_real_sum       = scalar_summary("d_loss_real", model.d_loss_real)
+
+    model.d_loss_real_sum       = scalar_summary("d_loss_real", model.d_loss_real)
     model.d_loss_fake_sum       = scalar_summary("d_loss_fake", model.d_loss_fake)
-  1  model.d_loss_class_real_sum = scalar_summary("d_loss_class_real", model.d_loss_class_real)
-    1 model.g_loss_class_fake_sum = scalar_summary("g_loss_class_fake", model.g_loss_class_fake)
-    m 100odel.g_loss_sum = scalar_summary("g_loss", model.g_loss)
+    model.d_loss_class_real_sum = scalar_summary("d_loss_class_real", model.d_loss_class_real)
+    model.g_loss_class_fake_sum = scalar_summary("g_loss_class_fake", model.g_loss_class_fake)
+    model.g_loss_sum = scalar_summary("g_loss", model.g_loss)
     model.d_loss_sum = scalar_summary("d_loss", model.d_loss)
     model.d_sum = merge_summary(
         [model.z_sum, model.d_sum, model.d_loss_real_sum, model.d_loss_sum,
