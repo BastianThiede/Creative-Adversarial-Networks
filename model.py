@@ -300,10 +300,6 @@ class DCGAN(object):
         if self.can:
         #update D
 
-          print(batch_images.mean(axis=1))
-          print('Batch_images')
-          print(batch_z.mean(axis=1))
-          print('Batch_z')
 
           _, summary_str = self.sess.run([self.d_update, self.sums[0]],
             feed_dict={
