@@ -14,7 +14,7 @@ flags.DEFINE_float("learning_rate", 0.0002, "Learning rate  for adam [0.0002]")
 flags.DEFINE_float("beta1", 0.5, "Momentum term of adam [0.5]")
 flags.DEFINE_float("smoothing", 0.9, "Smoothing term for discriminator real (class) loss [0.9]")
 flags.DEFINE_float("lambda_val", 1.0, "determines the relative importance of style ambiguity loss [1.0]")
-flags.DEFINE_integer("train_size", np.inf, "The size of train images [np.inf]")
+flags.DEFINE_float("train_size", np.inf, "The size of train images [np.inf]")
 flags.DEFINE_integer("save_itr", 500, "The number of iterations to run for saving checkpoints")
 flags.DEFINE_integer("sample_itr", 500, "The number of iterations to run for sampling from the sampler")
 flags.DEFINE_integer("batch_size", 64, "The size of batch images [64]")
@@ -133,16 +133,17 @@ def main(_):
       can=FLAGS.can)
 
 
-  run_config = tf.ConfigProto()
+  run_config = tf.ConfigProto(inter_op_parallelism_threads=3,intra_op_parallelism_threads=3)
   run_config.gpu_options.allow_growth=FLAGS.allow_gpu_growth
   with tf.Session(config=run_config) as sess:
     dcgan.set_sess(sess)
     # show_all_variables()
 
     if FLAGS.train:
+
       dcgan.train(FLAGS)
     else:
-      if not dcgan.load(FLAGS.checkpoint_dir)[0]:
+      if not dcgan.load(FLAGS.checkpoint_dir,config=FLAGS)[0]:
         raise Exception("[!] Train a model first, then run test mode")
 
     OPTION = 0

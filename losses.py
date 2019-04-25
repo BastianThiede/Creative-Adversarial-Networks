@@ -66,6 +66,11 @@ def CAN_loss(model):
       model.G_sum, model.d_loss_fake_sum, model.g_loss_sum])
 
     model.g_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
+    grads_g = model.g_opt.compute_gradients(model.g_loss)
+
+    grad_summ_op = tf.summary.merge([tf.summary.histogram("%s-grad" % g[1].name, g[0])
+                                     for g in grads_g])
+
     model.d_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
 
     t_vars = tf.trainable_variables()
@@ -75,7 +80,7 @@ def CAN_loss(model):
     d_update = model.d_opt.minimize(model.d_loss, var_list=d_vars)
     g_update = model.g_opt.minimize(model.g_loss, var_list=g_vars)
 
-    return d_update, g_update, [model.d_loss, model.g_loss], [model.d_sum, model.g_sum]
+    return d_update, g_update, [model.d_loss, model.g_loss], [model.d_sum, model.g_sum],grad_summ_op
 
 def WCAN_loss(model):
     pass

@@ -73,6 +73,7 @@ class DCGAN(object):
     self.g_bn3 = batch_norm(name='g_bn3')
     self.g_bn4 = batch_norm(name='g_bn4')
     self.g_bn5 = batch_norm(name='g_bn5')
+    self.g_bn6 = batch_norm(name='g_bn6')
 
     # variables that determines whether to use style net separate from discriminator
     self.style_net_checkpoint = style_net_checkpoint
@@ -97,6 +98,7 @@ class DCGAN(object):
       self.c_dim = 3
       self.label_dict = {}
       path_list = glob('./data/wikiart/**/', recursive=True)[1:]
+      print(path_list,'PATH_LIST')
       for i, elem in enumerate(path_list):
         print(elem[15:-1])
         self.label_dict[elem[15:-1]] = i
@@ -166,7 +168,7 @@ class DCGAN(object):
     if not self.wgan and self.can:
         self.discriminator = discriminators.vanilla_can
         self.generator = generators.vanilla_can
-        self.d_update, self.g_update, self.losses, self.sums = CAN_loss(self)
+        self.d_update, self.g_update, self.losses, self.sums, self.grad_summ_op = CAN_loss(self)
     elif not self.wgan and not self.can:
         #TODO: write the regular gan stuff
         self.d_update, self.g_update, self.losses, self.sums = GAN_loss(self)
@@ -188,6 +190,8 @@ class DCGAN(object):
     else:
       self.saver=tf.train.Saver()
   def train(self, config):
+
+    print('Training!')
     try:
       tf.global_variables_initializer().run()
     except:
@@ -258,7 +262,7 @@ class DCGAN(object):
       if loaded_sample_z is not None:
         sample_z = loaded_sample_z
     else:
-      print(" [!] Load failed...")
+      print(" [!] Load failed... :(")
 
     np.save(os.path.join(self.checkpoint_dir, 'sample_z'), sample_z)
     for epoch in xrange(config.epoch):
@@ -269,10 +273,8 @@ class DCGAN(object):
         # "./data", config.dataset, self.input_fname_pattern))
         shuffle(self.data)
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
-
       for idx in xrange(0, batch_idxs):
         self.experience_flag = not bool(idx % 2)
-
         if config.dataset == 'mnist':
           batch_images = self.data_X[idx*config.batch_size:(idx+1)*config.batch_size]
           batch_labels = self.data_y[idx*config.batch_size:(idx+1)*config.batch_size]
@@ -295,9 +297,9 @@ class DCGAN(object):
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
-
         if self.can:
         #update D
+
 
           _, summary_str = self.sess.run([self.d_update, self.sums[0]],
             feed_dict={
@@ -307,12 +309,18 @@ class DCGAN(object):
             })
           self.writer.add_summary(summary_str,counter)
         #Update G: don't need labels or inputs
-          _, summary_str = self.sess.run([self.g_update, self.sums[1]],
+          merged = tf.summary.merge_all()
+          _, summary_str,detail, grads = self.sess.run([self.g_update, self.sums[1], merged,self.grad_summ_op],
             feed_dict={
+              self.inputs: batch_images,
               self.z: batch_z,
-
+              self.y: batch_labels,
             })
+
+
           self.writer.add_summary(summary_str, counter)
+          self.writer.add_summary(detail, counter)
+          self.writer.add_summary(grads,counter)
           #do we need self.y for these two?
           errD_fake = self.d_loss_fake.eval({
               self.z: batch_z,
@@ -322,6 +330,7 @@ class DCGAN(object):
               self.inputs: batch_images,
               self.y:batch_labels
           })
+          print(batch_z.mean(axis=1))
           errG = self.g_loss.eval({
               self.z: batch_z
           })
@@ -338,6 +347,8 @@ class DCGAN(object):
               self.inputs: batch_images,
               self.y: batch_labels
           })
+
+
         else:
           # Update D network
           if self.wgan:
@@ -385,9 +396,11 @@ class DCGAN(object):
 
         counter += 1
         if self.can:
-          print("Epoch: [%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f" \
+
+          print("Epoch: [%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f,errD_fake: %.8f, errD_real: %.8f "
+                "errD_class_real: %.8f" \
             % (epoch, idx, batch_idxs,
-              time.time() - start_time, errD_fake+errD_real+errD_class_real, errG))
+              time.time() - start_time, errD_fake+errD_real+errD_class_real, errG,errD_fake, errD_real, errD_class_real))
           print("Discriminator class acc: %.2f" % (accuracy))
         else:
           if self.wgan:
@@ -563,7 +576,7 @@ class DCGAN(object):
 
     if config.load_dir:
       checkpoint_dir = config.load_dir
-
+    print(checkpoint_dir)
     ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
     if ckpt and ckpt.model_checkpoint_path:
       ckpt_name = os.path.basename(ckpt.model_checkpoint_path)

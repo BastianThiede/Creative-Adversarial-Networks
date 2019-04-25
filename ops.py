@@ -29,6 +29,18 @@ else:
 def conv_out_size_same(size, stride):
   return int(math.ceil(float(size) / float(stride)))
 
+def variable_summaries(var):
+  """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
+  with tf.name_scope('summaries'):
+    mean = tf.reduce_mean(var)
+    tf.summary.scalar('mean', mean)
+    with tf.name_scope('stddev'):
+      stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
+    tf.summary.scalar('stddev', stddev)
+    tf.summary.scalar('max', tf.reduce_max(var))
+    tf.summary.scalar('min', tf.reduce_min(var))
+    tf.summary.histogram('histogram', var)
+
 def sigmoid_cross_entropy_with_logits(x, y):
       try:
         return tf.nn.sigmoid_cross_entropy_with_logits(logits=x, labels=y)
@@ -64,15 +76,19 @@ def conv_cond_concat(x, y):
 def conv2d(input_, output_dim, 
        k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
        name="conv2d",padding='SAME'):
-  with tf.variable_scope(name):
+  with tf.variable_scope(name), tf.name_scope(name):
     if padding=='VALID':
       paddings = np.array([[0,0],[1,1],[1,1],[0,0]])
       input_ = tf.pad(input_, paddings)
-    w = tf.get_variable('w', [k_h, k_w, input_.get_shape()[-1], output_dim],
-              initializer=tf.truncated_normal_initializer(stddev=stddev))
-    conv = tf.nn.conv2d(input_, w, strides=[1, d_h, d_w, 1], padding=padding)
 
-    biases = tf.get_variable('biases', [output_dim], initializer=tf.constant_initializer(0.0))
+    with tf.name_scope('weights'):
+      w = tf.get_variable('w', [k_h, k_w, input_.get_shape()[-1], output_dim],
+              initializer=tf.truncated_normal_initializer(stddev=stddev))
+      variable_summaries(w)
+    conv = tf.nn.conv2d(input_, w, strides=[1, d_h, d_w, 1], padding=padding)
+    with tf.name_scope('biases'):
+      biases = tf.get_variable('biases', [output_dim], initializer=tf.constant_initializer(0.0))
+      variable_summaries(biases)
     out_shape = [-1] + conv.get_shape()[1:].as_list()
     conv = tf.reshape(tf.nn.bias_add(conv, biases), out_shape) 
     
