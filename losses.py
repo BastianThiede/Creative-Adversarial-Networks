@@ -1,6 +1,36 @@
 import tensorflow as tf
 from ops import *
 
+
+def cross_entropy_loss(hypes, logits, labels):
+    """Calculates the loss from the logits and the labels.
+
+    Args:
+      logits: Logits tensor, float - [batch_size, 2].
+      labels: Labels tensor, int32 - [batch_size, 2].
+
+    Returns:
+      loss: Loss tensor of type float.
+    """
+    with tf.name_scope('loss'):
+        logits = tf.reshape(logits, (-1, 2))
+        shape = [logits.get_shape()[0], 2]
+        epsilon = tf.constant(value=hypes['solver']['epsilon'], shape=shape)
+        logits = logits + epsilon
+        labels = tf.to_float(tf.reshape(labels, (-1, 2)))
+
+        softmax = tf.nn.softmax(logits)
+        cross_entropy = -tf.reduce_sum(labels * tf.log(softmax),
+                                       reduction_indices=[1])
+
+        cross_entropy_mean = tf.reduce_mean(cross_entropy,
+                                            name='xentropy_mean')
+        tf.add_to_collection('losses', cross_entropy_mean)
+
+        loss = tf.add_n(tf.get_collection('losses'), name='total_loss')
+    return loss
+
+
 def CAN_loss(model):
     #builds optimizers and losses
 
@@ -29,16 +59,16 @@ def CAN_loss(model):
     false_label = tf.random_uniform(tf.shape(model.D_), 0.0, 0.3)
 
     model.d_loss_real = tf.reduce_mean(
-      sigmoid_cross_entropy_with_logits(tf.where(tf.equal(model.D_,0),1e-10 * tf.ones_like(model.D_),model.D_),
-                                        true_label * tf.ones_like(model.D)))
+        cross_entropy_loss(model.D_,
+                           true_label * tf.ones_like(model.D))
+    )
 
-    model.d_loss_fake = tf.reduce_mean(
-      sigmoid_cross_entropy_with_logits(tf.where(tf.equal(model.D_logits_,0),1e-10 * tf.ones_like(model.D_logits_),model.D_logits_),
-                                        false_label * tf.ones_like(model.D_)))
+    model.d_loss_fake = tf.reduce_mean(cross_entropy_loss(model.D_logits_,
+                                                          false_label * tf.ones_like(model.D_)))
 
     model.d_loss_class_real = tf.reduce_mean(
-      tf.nn.softmax_cross_entropy_with_logits(logits=tf.where(tf.equal(model.D_c_logits,0),1e-10 * tf.ones_like(model.D_c_logits),model.D_c_logits),
-                                              labels=model.smoothing * model.y))
+      cross_entropy_loss(logits=model.D_c_logits,
+                         labels=model.smoothing * model.y))
 
     # if classifier is set, then use the classifier, o/w use the clasification layers in the discriminator
     if model.style_net_checkpoint is None:
@@ -48,7 +78,7 @@ def CAN_loss(model):
     else:
       model.classifier = model.make_style_net(model.G)
       model.g_loss_class_fake = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(logits=tf.where(tf.equal(model.classifier,0),1e-10 * tf.ones_like(model.classifier),model.classifier),
+        cross_entropy_loss(logits=model.classifier,
       labels=(1.0/model.y_dim)*tf.ones_like(model.D_c_)))
 
     model.g_loss_fake = -tf.reduce_mean(tf.log(tf.where(tf.equal(model.D_,0),1e-10 * tf.ones_like(model.D_), model.D_)))
