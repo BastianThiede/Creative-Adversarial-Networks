@@ -51,7 +51,7 @@ def CAN_loss(model):
         tf.nn.softmax_cross_entropy_with_logits(logits=tf.clip_by_value(model.classifier,1e-10,100),
       labels=(1.0/model.y_dim)*tf.ones_like(model.D_c_)))
 
-    model.g_loss_fake = -tf.reduce_mean(tf.log(tf.where(tf.equal(model.D_,1e-10,10))))
+    model.g_loss_fake = -tf.reduce_mean(tf.log(tf.clip_by_value(model.D_,1e-10,100)))
 
     model.d_loss = model.d_loss_real + model.d_loss_class_real + model.d_loss_fake
     model.g_loss = model.g_loss_fake + model.lamb * model.g_loss_class_fake
