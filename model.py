@@ -300,7 +300,12 @@ class DCGAN(object):
         if self.can:
         #update D
 
-
+          print(batch_images.mean(axis=1))
+          print('Batch_images')
+          print(batch_z.mean(axis=1))
+          print('Batch_z')
+          from collections import Counter
+          print(Counter(batch_labels))
           _, summary_str = self.sess.run([self.d_update, self.sums[0]],
             feed_dict={
               self.inputs: batch_images,
@@ -330,7 +335,7 @@ class DCGAN(object):
               self.inputs: batch_images,
               self.y:batch_labels
           })
-          print(batch_z.mean(axis=1))
+
           errG = self.g_loss.eval({
               self.z: batch_z
           })
