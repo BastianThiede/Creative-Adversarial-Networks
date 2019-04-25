@@ -304,8 +304,7 @@ class DCGAN(object):
           print('Batch_images')
           print(batch_z.mean(axis=1))
           print('Batch_z')
-          from collections import Counter
-          print(Counter(batch_labels.argmax(axis=1).tolist()))
+
           _, summary_str = self.sess.run([self.d_update, self.sums[0]],
             feed_dict={
               self.inputs: batch_images,
@@ -315,7 +314,7 @@ class DCGAN(object):
           self.writer.add_summary(summary_str,counter)
         #Update G: don't need labels or inputs
           merged = tf.summary.merge_all()
-          _, summary_str,detail, grads = self.sess.run([self.g_update, self.sums[1], merged,self.grad_summ_op],
+          _, summary_str,detail = self.sess.run([self.g_update, self.sums[1], merged],
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
@@ -325,7 +324,6 @@ class DCGAN(object):
 
           self.writer.add_summary(summary_str, counter)
           self.writer.add_summary(detail, counter)
-          self.writer.add_summary(grads,counter)
           #do we need self.y for these two?
           errD_fake = self.d_loss_fake.eval({
               self.z: batch_z,
