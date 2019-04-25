@@ -59,8 +59,7 @@ def CAN_loss(model):
     false_label = tf.random_uniform(tf.shape(model.D_), 0.0, 0.3)
 
     model.d_loss_real = tf.reduce_mean(
-        cross_entropy_loss(model.D_,
-                           true_label * tf.ones_like(model.D))
+        cross_entropy_loss(logits=model.D_, labels=(true_label * tf.ones_like(model.D)))
     )
 
     model.d_loss_fake = tf.reduce_mean(cross_entropy_loss(model.D_logits_,
