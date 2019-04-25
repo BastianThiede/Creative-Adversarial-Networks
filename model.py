@@ -324,7 +324,8 @@ class DCGAN(object):
           })
           errD_real = self.d_loss_real.eval({
               self.inputs: batch_images,
-              self.y:batch_labels
+              self.y:batch_labels,
+              self.z: batch_z
           })
 
           errG = self.g_loss.eval({
