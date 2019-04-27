@@ -33,7 +33,7 @@ def CAN_loss(model):
                                         true_label * tf.ones_like(model.D)))
 
     model.d_loss_fake = tf.reduce_mean(
-      sigmoid_cross_entropy_with_logits(model.D_logits_,
+      sigmoid_cross_entropy_with_logits(tf.clip_by_value(model.D_logits_,1e-10, 10),
                                         false_label * tf.ones_like(model.D_)))
 
     model.d_loss_class_real = tf.reduce_mean(
@@ -43,7 +43,7 @@ def CAN_loss(model):
     # if classifier is set, then use the classifier, o/w use the clasification layers in the discriminator
     if model.style_net_checkpoint is None:
       model.g_loss_class_fake = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(logits=model.D_c_logits_,
+        tf.nn.softmax_cross_entropy_with_logits(logits=tf.clip_by_value(model.D_c_logits_,1e-10,10),
           labels=(1.0/model.y_dim)*tf.ones_like(model.D_c_)))
     else:
       model.classifier = model.make_style_net(model.G)
