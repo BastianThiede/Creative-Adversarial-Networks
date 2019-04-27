@@ -4,7 +4,7 @@ python3 main.py \
 --learning_rate .000001 \
 --can True \
 --crop False \
---batch_size 16 \
+--batch_size 32 \
 --beta 0.5 \
 --dataset wikiart \
 --epoch 25 \
