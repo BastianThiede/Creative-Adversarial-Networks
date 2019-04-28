@@ -314,6 +314,7 @@ class DCGAN(object):
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
+              self.y: batch_labels,
             })
 
           self.writer.add_summary(details, counter)
