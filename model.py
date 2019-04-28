@@ -312,6 +312,7 @@ class DCGAN(object):
           merged = tf.summary.merge_all()
           _, summary_str = self.sess.run([self.g_update, self.sums[1]],
             feed_dict={
+              self.inputs: batch_images,
               self.z: batch_z,
             })
 
