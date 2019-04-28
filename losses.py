@@ -2,7 +2,9 @@ import tensorflow as tf
 from ops import *
 
 def clip_tensor(tens):
-    return tf.clip_by_value(tens,1e-10,1)
+    print(tens)
+    return tens
+    #return tf.clip_by_value(tens,1e-10,1)
 
 
 def CAN_loss(model):
