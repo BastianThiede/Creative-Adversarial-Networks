@@ -310,13 +310,13 @@ class DCGAN(object):
           self.writer.add_summary(summary_str,counter)
         #Update G: don't need labels or inputs
           merged = tf.summary.merge_all()
-          _, summary_str = self.sess.run([self.g_update, self.sums[1]],
+          _, summary_str,details  = self.sess.run([self.g_update, self.sums[1],merged],
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
             })
 
-
+          self.writer.add_summary(details, counter)
           self.writer.add_summary(summary_str, counter)
           #do we need self.y for these two?
           errD_fake = self.d_loss_fake.eval({
