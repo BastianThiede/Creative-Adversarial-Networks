@@ -140,7 +140,7 @@ def main(_):
   with tf.Session(config=run_config) as sess:
 
 
-    sess = tf_debug.TensorBoardDebugWrapperSession(sess, 'localhost:6064')
+    #sess = tf_debug.TensorBoardDebugWrapperSession(sess, 'localhost:6064')
     dcgan.set_sess(sess)
 
     # show_all_variables()
