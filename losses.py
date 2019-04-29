@@ -2,6 +2,7 @@ import tensorflow as tf
 from ops import *
 
 def clip_tensor(tens):
+    return tens
     tf.print(tens)
     mask = tf.equal(tens, 1e-42 * tf.ones_like(tens))
     new_tensor = tf.multiply(tens, tf.cast(mask, 'float32'))
