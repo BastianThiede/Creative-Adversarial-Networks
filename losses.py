@@ -3,7 +3,7 @@ from ops import *
 
 def clip_tensor(tens):
     mask = tf.equal(tens, 0.00001 * tf.ones_like(tens))
-    new_tensor = tf.multiply(tens, mask)
+    new_tensor = tf.multiply(tens, tf.cast(mask, 'float32'))
     return new_tensor
     #return tf.clip_by_value(tens,1e-10,1)
 
