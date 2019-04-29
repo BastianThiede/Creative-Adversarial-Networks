@@ -1,6 +1,8 @@
 import os
 import scipy.misc
 import numpy as np
+from tensorflow.python import debug as tf_debug
+
 from glob import glob
 
 from model import DCGAN
@@ -136,7 +138,11 @@ def main(_):
   run_config = tf.ConfigProto(inter_op_parallelism_threads=3,intra_op_parallelism_threads=3)
   run_config.gpu_options.per_process_gpu_memory_fraction=0.7
   with tf.Session(config=run_config) as sess:
+
+
+    sess = tf_debug.TensorBoardDebugWrapperSession(sess, 'localhost:6064')
     dcgan.set_sess(sess)
+
     # show_all_variables()
 
     if FLAGS.train:
