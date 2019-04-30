@@ -144,6 +144,18 @@ class DCGAN(object):
     else:
       self.y = None
 
+    tpu_ops_d = tf.contrib.tpu.rewrite([self.d_update, self.sums[0]],
+                                       [self.inputs, self.z,self.y_])
+
+    tpu_ops_g = tf.contrib.tpu.rewrite([self.g_update, self.sums[1]],
+                                       [self.inputs, self.z, self.y_])
+
+    tpu_ops_acc = tf.contrib.tpu.rewrite(self.accuracy,
+                                         [self.inputs, self.y_])
+
+
+
+
     if self.crop:
       image_dims = [self.output_height, self.output_width, self.c_dim]
     else:
@@ -298,32 +310,30 @@ class DCGAN(object):
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
         if self.can:
-        #update D
-
-
-          _, summary_str = self.sess.run([self.d_update, self.sums[0]],
+          _, summary_str = self.sess.run(tpu_ops_d,
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
               self.y: batch_labels,
             })
-          self.writer.add_summary(summary_str,counter)
-        #Update G: don't need labels or inputs
-          merged = tf.summary.merge_all()
-          _, summary_str  = self.sess.run([self.g_update, self.sums[1]],
-            feed_dict={
-              self.inputs: batch_images,
-              self.z: batch_z,
-              self.y: batch_labels,
-            })
+          self.writer.add_summary(summary_str, counter)
+          _, summary_str = self.sess.run(tpu_ops_g,
+                                         feed_dict={
+                                           self.inputs: batch_images,
+                                           self.z: batch_z,
+                                           self.y: batch_labels,
+                                         })
+
+          self.writer.add_summary(summary_str, counter)
 
           #self.writer.add_summary(details, counter)
-          self.writer.add_summary(summary_str, counter)
+
           #do we need self.y for these two?
-          accuracy = self.accuracy.eval({
-            self.inputs: batch_images,
-            self.y: batch_labels
-          })
+          accuracy = self.sess.run(tpu_ops_acc,
+                                   feed_dict={
+                                    self.inputs: batch_images,
+                                    self.y: batch_labels
+                                  })
 
           if False:
             errD_fake = self.d_loss_fake.eval({
