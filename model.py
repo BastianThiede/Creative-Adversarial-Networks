@@ -246,10 +246,10 @@ class DCGAN(object):
         sample_inputs = np.array(sample).astype(np.float32)
 
     counter = 1
-    tpu_ops_d = tf.contrib.tpu.rewrite([self.d_update, self.sums[0]],
+    tpu_ops_d = tf.contrib.tpu.rewrite(self.d_update,
                                        [self.inputs, self.z, self.y])
 
-    tpu_ops_g = tf.contrib.tpu.rewrite([self.g_update, self.sums[1]],
+    tpu_ops_g = tf.contrib.tpu.rewrite(self.g_update,
                                        [self.inputs, self.z, self.y])
 
     tpu_ops_acc = tf.contrib.tpu.rewrite(self.accuracy,
@@ -310,21 +310,21 @@ class DCGAN(object):
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
         if self.can:
-          _, summary_str = self.sess.run(tpu_ops_d,
+          _= self.sess.run(tpu_ops_d,
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
               self.y: batch_labels,
             })
-          self.writer.add_summary(summary_str, counter)
-          _, summary_str = self.sess.run(tpu_ops_g,
+          #self.writer.add_summary(summary_str, counter)
+          _ = self.sess.run(tpu_ops_g,
                                          feed_dict={
                                            self.inputs: batch_images,
                                            self.z: batch_z,
                                            self.y: batch_labels,
                                          })
 
-          self.writer.add_summary(summary_str, counter)
+          #self.writer.add_summary(summary_str, counter)
 
           #self.writer.add_summary(details, counter)
 
