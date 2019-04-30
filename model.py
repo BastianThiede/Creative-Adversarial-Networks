@@ -400,10 +400,9 @@ class DCGAN(object):
         if self.can:
           if np.mod(counter, 50) == 1:
             self.save(config.checkpoint_dir, counter, config)
-          print("Epoch: [%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f,errD_fake: %.8f, errD_real: %.8f "
-                "errD_class_real: %.8f" \
+          print("Epoch: [%2d] [%4d/%4d] time: %4.4f" \
             % (epoch, idx, batch_idxs,
-              time.time() - start_time, errD_fake+errD_real+errD_class_real, errG,errD_fake, errD_real, errD_class_real))
+              time.time() - start_time))
           print("Discriminator class acc: %.2f" % (accuracy))
         else:
           if self.wgan:
