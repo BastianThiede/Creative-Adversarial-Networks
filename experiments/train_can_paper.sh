@@ -11,6 +11,7 @@ python3 main.py \
 --input_fname_pattern */*.jpg \
 --input_height 256 \
 --lambda_val 1.0 \
+--log_dir /content/gdrive/My\ Drive/can_checkpoints
 --output_height 256 \
 --sample_size 16 \
 --smoothing 1.0 \
