@@ -144,14 +144,6 @@ class DCGAN(object):
     else:
       self.y = None
 
-    tpu_ops_d = tf.contrib.tpu.rewrite([self.d_update, self.sums[0]],
-                                       [self.inputs, self.z,self.y_])
-
-    tpu_ops_g = tf.contrib.tpu.rewrite([self.g_update, self.sums[1]],
-                                       [self.inputs, self.z, self.y_])
-
-    tpu_ops_acc = tf.contrib.tpu.rewrite(self.accuracy,
-                                         [self.inputs, self.y_])
 
 
 
@@ -254,6 +246,14 @@ class DCGAN(object):
         sample_inputs = np.array(sample).astype(np.float32)
 
     counter = 1
+    tpu_ops_d = tf.contrib.tpu.rewrite([self.d_update, self.sums[0]],
+                                       [self.inputs, self.z, self.y_])
+
+    tpu_ops_g = tf.contrib.tpu.rewrite([self.g_update, self.sums[1]],
+                                       [self.inputs, self.z, self.y_])
+
+    tpu_ops_acc = tf.contrib.tpu.rewrite(self.accuracy,
+                                         [self.inputs, self.y_])
     start_time = time.time()
     could_load, checkpoint_counter, loaded_sample_z = self.load(self.checkpoint_dir,
         config,
