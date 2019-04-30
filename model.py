@@ -398,6 +398,7 @@ class DCGAN(object):
         if self.can:
           if np.mod(counter, 50) == 1:
             #self.save(config.checkpoint_dir, counter, config)
+            1 == 1
           print("Epoch: [%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f,errD_fake: %.8f, errD_real: %.8f "
                 "errD_class_real: %.8f" \
             % (epoch, idx, batch_idxs,
