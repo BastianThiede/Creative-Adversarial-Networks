@@ -319,34 +319,36 @@ class DCGAN(object):
 
           #self.writer.add_summary(details, counter)
           self.writer.add_summary(summary_str, counter)
-          #do we need self.y for these two?
-          errD_fake = self.d_loss_fake.eval({
-              self.inputs: batch_images,
-              self.z: batch_z,
-              self.y:batch_labels
-          })
-          errD_real = self.d_loss_real.eval({
-              self.inputs: batch_images,
-              self.y:batch_labels,
-              self.z: batch_z
-          })
-
-          errG = self.g_loss.eval({
-              self.z: batch_z
-          })
-
-          errD_class_real = self.d_loss_class_real.eval({
-              self.inputs: batch_images,
-              self.y: batch_labels
-          })
-          errG_class_fake = self.g_loss_class_fake.eval({
-              self.inputs: batch_images,
-              self.z: batch_z
-          })
           accuracy = self.accuracy.eval({
-              self.inputs: batch_images,
-              self.y: batch_labels
+            self.inputs: batch_images,
+            self.y: batch_labels
           })
+          if False:
+            #do we need self.y for these two?
+            errD_fake = self.d_loss_fake.eval({
+                self.inputs: batch_images,
+                self.z: batch_z,
+                self.y:batch_labels
+            })
+            errD_real = self.d_loss_real.eval({
+                self.inputs: batch_images,
+                self.y:batch_labels,
+                self.z: batch_z
+            })
+
+            errG = self.g_loss.eval({
+                self.z: batch_z
+            })
+
+            errD_class_real = self.d_loss_class_real.eval({
+                self.inputs: batch_images,
+                self.y: batch_labels
+            })
+            errG_class_fake = self.g_loss_class_fake.eval({
+                self.inputs: batch_images,
+                self.z: batch_z
+            })
+
 
 
         else:
