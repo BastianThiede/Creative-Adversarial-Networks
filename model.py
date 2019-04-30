@@ -320,6 +320,11 @@ class DCGAN(object):
           #self.writer.add_summary(details, counter)
           self.writer.add_summary(summary_str, counter)
           #do we need self.y for these two?
+          accuracy = self.accuracy.eval({
+            self.inputs: batch_images,
+            self.y: batch_labels
+          })
+
           if False:
             errD_fake = self.d_loss_fake.eval({
                 self.inputs: batch_images,
@@ -344,10 +349,7 @@ class DCGAN(object):
                 self.inputs: batch_images,
                 self.z: batch_z
             })
-            accuracy = self.accuracy.eval({
-                self.inputs: batch_images,
-                self.y: batch_labels
-            })
+
 
 
         else:
@@ -400,10 +402,9 @@ class DCGAN(object):
           if np.mod(counter, 50) == 1:
             #self.save(config.checkpoint_dir, counter, config)
             1 == 1
-          print("Epoch: [%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f,errD_fake: %.8f, errD_real: %.8f "
-                "errD_class_real: %.8f" \
+          print("Epoch: [%2d] [%4d/%4d] time: %4.4f" \
             % (epoch, idx, batch_idxs,
-              time.time() - start_time, errD_fake+errD_real+errD_class_real, errG,errD_fake, errD_real, errD_class_real))
+              time.time() - start_time))
           print("Discriminator class acc: %.2f" % (accuracy))
         else:
           if self.wgan:
