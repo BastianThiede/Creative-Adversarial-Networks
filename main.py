@@ -137,7 +137,8 @@ def main(_):
 
   run_config = tf.ConfigProto(inter_op_parallelism_threads=3,intra_op_parallelism_threads=3)
   run_config.gpu_options.per_process_gpu_memory_fraction=0.7
-  with tf.Session(config=run_config) as sess:
+  tpu_address = 'grpc://' + os.environ['COLAB_TPU_ADDR']
+  with tf.Session(tpu_address) as sess:
 
 
     #sess = tf_debug.TensorBoardDebugWrapperSession(sess, 'localhost:6064')
