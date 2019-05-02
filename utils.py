@@ -30,7 +30,9 @@ def get_image(image_path, input_height, input_width,
   try:
     return transform(image, input_height, input_width,
                    resize_height, resize_width, crop)
-  except ValueError:
+  except ValueError :
+    print("Bad image. filepath: ", image_path)
+  except AttributeError:
     print("Bad image. filepath: ", image_path)
 def save_images(images, size, image_path):
   return imsave(inverse_transform(images), size, image_path)
