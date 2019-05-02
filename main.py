@@ -144,7 +144,7 @@ def main(_):
     dcgan.set_sess(sess)
 
     # show_all_variables()
-
+    print(FLAGS.train,'TRAIN')
     if FLAGS.train:
 
       dcgan.train(FLAGS)
