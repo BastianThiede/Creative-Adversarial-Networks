@@ -291,7 +291,10 @@ class DCGAN(object):
           if self.grayscale:
             batch_images = np.array(batch).astype(np.float32)[:, :, :, None]
           else:
-            batch_images = np.array(batch).astype(np.float32)
+            try:
+              batch_images = np.array(batch).astype(np.float32)
+            except ValueError:
+              continue
           batch_labels = self.get_y(batch_files)
 
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
