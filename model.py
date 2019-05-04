@@ -572,12 +572,6 @@ class DCGAN(object):
       #find the high checkpoint path in a path
       files_in_path = sorted(os.listdir(path))
 
-      if len(files_in_path) > 1:
-        last_ = files_in_path[-2]
-
-        checkpoint_dir  = os.path.join(path, last_, 'checkpoint')
-      else:
-        checkpoint_dir = None
 
     if config.load_dir:
       checkpoint_dir = config.load_dir
