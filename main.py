@@ -72,16 +72,6 @@ def main(_):
                 FLAGS.input_height,
                 FLAGS.style_net_checkpoint is not None,
                 FLAGS.batch_size))
-  if not glob(log_dir + "*"):
-    log_dir = os.path.join(log_dir, "000")
-  else:
-    containing_dir=os.path.join(log_dir, "[0-9][0-9][0-9]")
-    nums = [int(x[-3:]) for x in glob(containing_dir)] # TODO FIX THESE HACKS
-    if nums == []:
-      num = 0
-    else:
-      num = max(nums) + 1
-    log_dir = os.path.join(log_dir,"{:03d}".format(num))
   FLAGS.log_dir = log_dir
 
   if FLAGS.checkpoint_dir is None:

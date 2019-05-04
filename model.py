@@ -553,7 +553,7 @@ class DCGAN(object):
 
   def load(self, checkpoint_dir, config, style_net_checkpoint_dir=None, use_last_checkpoint=True):
     import re
-    print(" [*] Reading checkpoints...")
+    print(" [*] Reading checkpoints from {}".format(checkpoint_dir))
     if not config.use_default_checkpoint:
       checkpoint_dir = os.path.join(checkpoint_dir, self.model_dir)
 
