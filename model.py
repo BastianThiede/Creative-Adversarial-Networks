@@ -266,6 +266,7 @@ class DCGAN(object):
 
     np.save(os.path.join(self.checkpoint_dir, 'sample_z'), sample_z)
     for epoch in xrange(config.epoch):
+      load_time_start = time.time()
       if config.dataset == 'mnist':
         batch_idxs = min(len(self.data_X), config.train_size) // config.batch_size
       else:
@@ -300,9 +301,10 @@ class DCGAN(object):
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
+        file_load_time = time.time() - load_time_start
         if self.can:
         #update D
-
+          train_time_start = time.time()
 
           _, summary_str = self.sess.run([self.d_update, self.sums[0]],
             feed_dict={
@@ -326,6 +328,7 @@ class DCGAN(object):
             self.inputs: batch_images,
             self.y: batch_labels
           })
+          train_time = time.time() - train_time_start
           if False:
             #do we need self.y for these two?
             errD_fake = self.d_loss_fake.eval({
@@ -403,9 +406,9 @@ class DCGAN(object):
         if self.can:
           if np.mod(counter, 50) == 1:
             self.save(config.checkpoint_dir, counter, config)
-          print("Epoch: [%2d] [%4d/%4d] time: %4.4f" \
+          print("Epoch: [%2d] [%4d/%4d] time: %4.4f file_load: %4.4f train_time: %4.4f" \
             % (epoch, idx, batch_idxs,
-              time.time() - start_time))
+              time.time() - start_time,file_load_time,train_time))
           print("Discriminator class acc: %.2f" % (accuracy))
         else:
           if self.wgan:
