@@ -266,7 +266,7 @@ class DCGAN(object):
 
     np.save(os.path.join(self.checkpoint_dir, 'sample_z'), sample_z)
     for epoch in xrange(config.epoch):
-      load_time_start = time.time()
+
       if config.dataset == 'mnist':
         batch_idxs = min(len(self.data_X), config.train_size) // config.batch_size
       else:
@@ -275,6 +275,7 @@ class DCGAN(object):
         shuffle(self.data)
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
       for idx in xrange(0, batch_idxs):
+        load_time_start = time.time()
         self.experience_flag = not bool(idx % 2)
         if config.dataset == 'mnist':
           batch_images = self.data_X[idx*config.batch_size:(idx+1)*config.batch_size]
