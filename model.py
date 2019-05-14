@@ -246,6 +246,7 @@ class DCGAN(object):
     could_load, checkpoint_counter, loaded_sample_z = self.load(self.checkpoint_dir,
         config,
         style_net_checkpoint_dir=self.style_net_checkpoint)
+    print(could_load,checkpoint_counter,loaded_sample_z)
     if could_load:
       counter = checkpoint_counter
       if self.replay:
