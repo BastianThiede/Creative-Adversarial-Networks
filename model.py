@@ -406,7 +406,7 @@ class DCGAN(object):
 
         counter += 1
         if self.can:
-          if np.mod(counter, 50) == 1:
+          if np.mod(counter, 400) == 1:
             self.save(config.checkpoint_dir, counter, config)
           print("Epoch: [%2d] [%4d/%4d] time: %4.4f file_load: %4.4f train_time: %4.4f" \
             % (epoch, idx, batch_idxs,
