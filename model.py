@@ -279,7 +279,7 @@ class DCGAN(object):
       print(batch_idxs,'Batch idx')
       b_idx = list(xrange(0, batch_idxs))
       shuffle(b_idx)
-      for idx in shuffle(b_idx):
+      for idx in b_idx:
         load_time_start = time.time()
         self.experience_flag = not bool(idx % 2)
         if config.dataset == 'mnist':
