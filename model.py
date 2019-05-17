@@ -267,6 +267,7 @@ class DCGAN(object):
 
     np.save(os.path.join(self.checkpoint_dir, 'sample_z'), sample_z)
     for epoch in xrange(config.epoch):
+      print('EPOCH {}'.format(epoch))
 
       if config.dataset == 'mnist':
         batch_idxs = min(len(self.data_X), config.train_size) // config.batch_size
@@ -275,6 +276,7 @@ class DCGAN(object):
         # "./data", config.dataset, self.input_fname_pattern))
         shuffle(self.data)
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
+      print(batch_idxs,'Batch idx')
       for idx in xrange(0, batch_idxs):
         load_time_start = time.time()
         self.experience_flag = not bool(idx % 2)
