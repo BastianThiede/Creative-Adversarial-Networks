@@ -277,7 +277,7 @@ class DCGAN(object):
         shuffle(self.data)
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
       print(batch_idxs,'Batch idx')
-      for idx in xrange(0, batch_idxs):
+      for idx in shuffle(xrange(0, batch_idxs)):
         load_time_start = time.time()
         self.experience_flag = not bool(idx % 2)
         if config.dataset == 'mnist':
