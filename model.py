@@ -6,6 +6,7 @@ import tensorflow as tf
 import numpy as np
 from six.moves import xrange
 from random import shuffle
+from tensorflow.python.client import timeline
 
 from slim.nets import nets_factory
 import generators
@@ -189,7 +190,7 @@ class DCGAN(object):
       self.style_net_saver = tf.train.Saver(var_list=style_net_vars)
     else:
       self.saver=tf.train.Saver()
-  def train(self, config):
+  def train(self, config,run_metadata):
 
     print('Training!')
     try:
@@ -276,7 +277,9 @@ class DCGAN(object):
         # "./data", config.dataset, self.input_fname_pattern))
         shuffle(self.data)
         batch_idxs = min(len(self.data), config.train_size) // config.batch_size
-      print(batch_idxs,'Batch idx')
+
+
+      print('Batch idx: {} data-length: {}'.format(batch_idxs,len(self.data)))
       b_idx = list(xrange(0, batch_idxs))
       shuffle(b_idx)
       for idx in b_idx:
@@ -415,6 +418,10 @@ class DCGAN(object):
           print("Epoch: [%2d] [%4d/%4d] time: %4.4f file_load: %4.4f train_time: %4.4f" \
             % (epoch, idx, batch_idxs,
               time.time() - start_time,file_load_time,train_time))
+          fetched_timeline = timeline.Timeline(run_metadata.step_stats)
+          chrome_trace = fetched_timeline.generate_chrome_trace_format()
+          with open('timeline_02_step_%d.json' % i, 'w') as f:
+            f.write(chrome_trace)
           print("Discriminator class acc: %.2f" % (accuracy))
         else:
           if self.wgan:

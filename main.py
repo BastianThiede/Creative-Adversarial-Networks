@@ -4,6 +4,8 @@ import numpy as np
 from tensorflow.python import debug as tf_debug
 
 from glob import glob
+from tensorflow.python.client import timeline
+
 
 from model import DCGAN
 from utils import pp, visualize, show_all_variables
@@ -129,6 +131,8 @@ def main(_):
   run_config.gpu_options.per_process_gpu_memory_fraction=0.7
   with tf.Session(config=run_config) as sess:
 
+    options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+    run_metadata = tf.RunMetadata()
 
     #sess = tf_debug.TensorBoardDebugWrapperSession(sess, 'localhost:6064')
     dcgan.set_sess(sess)
@@ -137,7 +141,7 @@ def main(_):
     print(FLAGS.train,'TRAIN')
     if FLAGS.train:
 
-      dcgan.train(FLAGS)
+      dcgan.train(FLAGS,run_metadata)
     else:
       if not dcgan.load(FLAGS.checkpoint_dir,config=FLAGS)[0]:
         raise Exception("[!] Train a model first, then run test mode")
