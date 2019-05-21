@@ -41,12 +41,11 @@ def save_images(images, size, image_path):
 def imread(path, grayscale = False):
   try:
     if (grayscale):
-      return imageio.imread(path, flatten = True).astype(np.float)
+      return scipy.misc.imread(path, flatten = True).astype(np.float)
     else:
-      return imageio.imread(path).astype(np.float)
+      return scipy.misc.imread(path).astype(np.float)
   except(TypeError):
     print(path)
-
 #Do
 def test_images(path_glob):
     for path in path_glob:
