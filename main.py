@@ -98,7 +98,7 @@ def main(_):
   if FLAGS.dataset == 'mnist':
     y_dim = 10
   elif FLAGS.dataset == 'wikiart':
-    y_dim = 27
+    y_dim = 13
   else:
     y_dim = None
   dcgan = DCGAN(
