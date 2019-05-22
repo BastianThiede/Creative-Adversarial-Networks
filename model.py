@@ -320,9 +320,9 @@ class DCGAN(object):
               self.z: batch_z,
               self.y: batch_labels,
             })
-          self.writer.add_summary(summary_str,counter)
+          #self.writer.add_summary(summary_str,counter)
         #Update G: don't need labels or inputs
-          merged = tf.summary.merge_all()
+          #merged = tf.summary.merge_all()
           _  = self.sess.run([self.g_update],
             feed_dict={
               self.inputs: batch_images,
@@ -331,7 +331,7 @@ class DCGAN(object):
             })
 
           #self.writer.add_summary(details, counter)
-          self.writer.add_summary(summary_str, counter)
+          #self.writer.add_summary(summary_str, counter)
           accuracy = self.accuracy.eval({
             self.inputs: batch_images,
             self.y: batch_labels
