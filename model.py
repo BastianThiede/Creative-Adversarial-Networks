@@ -314,7 +314,7 @@ class DCGAN(object):
         #update D
           train_time_start = time.time()
 
-          _, summary_str = self.sess.run([self.d_update, self.sums[0]],
+          _, summary_str = self.sess.run([self.d_update],
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
@@ -323,7 +323,7 @@ class DCGAN(object):
           self.writer.add_summary(summary_str,counter)
         #Update G: don't need labels or inputs
           merged = tf.summary.merge_all()
-          _, summary_str  = self.sess.run([self.g_update, self.sums[1]],
+          _, summary_str  = self.sess.run([self.g_update],
             feed_dict={
               self.inputs: batch_images,
               self.z: batch_z,
