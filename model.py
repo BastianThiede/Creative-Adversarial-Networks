@@ -283,7 +283,7 @@ class DCGAN(object):
       b_idx = list(xrange(0, batch_idxs))
       for idx in b_idx:
         load_time_start = time.time()
-        self.experience_flag = not bool(idx % 2)
+        self.experience_flag = False
         if config.dataset == 'mnist':
           batch_images = self.data_X[idx*config.batch_size:(idx+1)*config.batch_size]
           batch_labels = self.data_y[idx*config.batch_size:(idx+1)*config.batch_size]
