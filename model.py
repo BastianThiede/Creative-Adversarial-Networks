@@ -281,7 +281,6 @@ class DCGAN(object):
 
       print('Batch idx: {} data-length: {}'.format(batch_idxs,len(self.data)))
       b_idx = list(xrange(0, batch_idxs))
-      shuffle(b_idx)
       for idx in b_idx:
         load_time_start = time.time()
         self.experience_flag = not bool(idx % 2)
