@@ -74,7 +74,7 @@ def conv_cond_concat(x, y):
     x, y*tf.ones([x_shapes[0], x_shapes[1], x_shapes[2], y_shapes[3]])], 3)
 
 def conv2d(input_, output_dim, 
-       k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.06,
+       k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
        name="conv2d",padding='SAME'):
   with tf.variable_scope(name), tf.name_scope(name):
     if padding=='VALID':
