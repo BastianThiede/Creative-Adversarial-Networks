@@ -74,7 +74,7 @@ def conv_cond_concat(x, y):
     x, y*tf.ones([x_shapes[0], x_shapes[1], x_shapes[2], y_shapes[3]])], 3)
 
 def conv2d(input_, output_dim, 
-       k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
+       k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.08,
        name="conv2d",padding='SAME'):
   with tf.variable_scope(name), tf.name_scope(name):
     if padding=='VALID':
@@ -111,7 +111,7 @@ def resizeconv(input_, output_shape,
     return tf.nn.bias_add(resconv, biases)
 
 def deconv2d(input_, output_shape,
-       k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
+       k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.06,
        name="deconv2d"):
   with tf.variable_scope(name):
     static_shape = input_.get_shape().as_list()
@@ -135,7 +135,7 @@ def deconv2d(input_, output_shape,
 def lrelu(x, leak=0.2, name="lrelu"):
   return tf.maximum(x, leak*x)
 
-def linear(input_, output_size, scope=None, stddev=0.02, bias_start=0.0):
+def linear(input_, output_size, scope=None, stddev=0.06, bias_start=0.0):
   shape = input_.get_shape().as_list()
   with tf.variable_scope(scope or "Linear"):
     matrix = tf.get_variable("Matrix", [shape[1], output_size], tf.float32,

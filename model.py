@@ -441,6 +441,7 @@ class DCGAN(object):
             # todo make into a flag
             exp_buffer_len = 10000
             if len(self.experience_buffer) > exp_buffer_len:
+              print('RESIZING!')
               self.experience_buffer = self.experience_buffer[len(self.experience_buffer) - exp_buffer_len:]
 
 
