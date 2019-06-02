@@ -40,7 +40,7 @@ def CAN_loss(model):
     false_label = tf.random_uniform(tf.shape(model.D_), 0.05, 0.35)
 
     model.d_loss_real = - tf.reduce_mean(tf.log(model.D))
-
+    print(model.D_c_logits,'DC_LOGITS')
     model.d_loss_class_real = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(logits=model.D_c_logits,
                                               labels=model.y))
