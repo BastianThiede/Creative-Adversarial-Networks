@@ -337,7 +337,7 @@ class DCGAN(object):
             self.y: batch_labels
           })
           train_time = time.time() - train_time_start
-          if False:
+          if True:
             #do we need self.y for these two?
             errD_fake = self.d_loss_fake.eval({
                 self.inputs: batch_images,
@@ -418,6 +418,8 @@ class DCGAN(object):
             % (epoch, idx, batch_idxs,
               time.time() - start_time,file_load_time,train_time))
           print("Discriminator class acc: %.2f" % (accuracy))
+          print("Err-D: {}, Err-d_class: {} Err-D_fake: {} Err-D_real: {},"
+                "Err-G_class: {} Err-G_class_fakse".format(errD,errD_class_real,errD_fake,errD_real,errG_class_fake))
         else:
           if self.wgan:
             print("Epoch: [%2d] [%4d/%4d] time: %4.4f, d_loss: %.8f, g_loss: %.8f" \
