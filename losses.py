@@ -29,6 +29,8 @@ def CAN_loss(model):
     model.d__sum = histogram_summary("d_", model.D_)
     model.d_c_sum = histogram_summary("d_c", model.D_c)
     model.d_c__sum = histogram_summary("d_c_", model.D_c_)
+    sum_d_c_logits = histogram_summary('D_c_logits', model.D_c_logits)
+    sum_d_c_logits_ = histogram_summary('D_c_logits_', model.D_c_logits_)
     model.G_sum = image_summary("G", model.G)
 
     correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
@@ -42,6 +44,9 @@ def CAN_loss(model):
     model.d_loss_class_real = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(logits=model.D_c_logits,
                                               labels=model.y))
+
+    model.test_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=tf.ones_like,
+                                                                             labels=model.y))
 
     model.d_loss_fake = - tf.reduce_mean(tf.log(1 - model.D_))
 
@@ -62,7 +67,8 @@ def CAN_loss(model):
     model.g_loss_sum = scalar_summary("g_loss", model.g_loss)
     model.d_loss_sum = scalar_summary("d_loss", model.d_loss)
     model.d_sum = merge_summary(
-        [model.z_sum, model.d_sum, model.d_loss_real_sum, model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
+        [model.z_sum, model.d_sum, model.d_loss_real_sum,
+         sum_d_c_logits_,sum_d_c_logits,model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
          model.d_c_sum, model.d_c__sum])
     model.g_sum = merge_summary([model.z_sum, model.d__sum,
       model.G_sum, model.d_loss_fake_sum, model.g_loss_sum])
