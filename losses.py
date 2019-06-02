@@ -43,7 +43,7 @@ def CAN_loss(model):
 
     model.d_loss_fake = tf.reduce_mean(
       sigmoid_cross_entropy_with_logits(clip_tensor(model.D_logits_),
-                                        tf.zeroes_like(model.D_)))
+                                        tf.zeros_like(model.D_)))
 
     model.d_loss_class_real = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(logits=clip_tensor(model.D_c_logits),
