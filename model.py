@@ -117,7 +117,7 @@ class DCGAN(object):
   def upsample(self, input_, output_shape,
         k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02,
         name=None):
-    print(self.use_resize,'USE_RESIZE')
+    self.use_resize = False
     if self.use_resize:
       return resizeconv(input_=input_, output_shape=output_shape,
         k_h=k_h, k_w=k_w, d_h=d_h, d_w=d_w, name=(name or "resconv"))
