@@ -350,11 +350,7 @@ class DCGAN(object):
                 self.z: batch_z
             })
 
-            test_loss = self.test_loss.eval({
-                self.inputs: batch_images,
-                self.y:batch_labels,
-                self.z: batch_z
-            })
+
 
             errG = self.g_loss.eval({
                 self.z: batch_z
@@ -424,7 +420,6 @@ class DCGAN(object):
             % (epoch, idx, batch_idxs,
               time.time() - start_time,file_load_time,train_time))
           print("Discriminator class acc: %.2f" % (accuracy))
-          print('TEST-Loss: {}'.format(test_loss))
           print("Err-d_class_real: {} Err-D_fake: {} Err-D_real: {},"
                 "Err-G_class_fake: {}".format(errD_class_real,errD_fake,errD_real,errG_class_fake))
         else:
