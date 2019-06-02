@@ -59,7 +59,7 @@ def vanilla_can(model, z, is_sampler=False):
         #tf.summary.histogram('h6',h6)
         #tf.summary.histogram('h6_tanh', tf.nn.tanh(h6))
         print(h6)
-        print('------------- MODEL STATS --------------)
+        print('------------- MODEL STATS --------------')
 
         return tf.nn.tanh(h6)
 
