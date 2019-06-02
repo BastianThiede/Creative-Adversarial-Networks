@@ -439,7 +439,7 @@ class DCGAN(object):
               #scipy.misc.imsave(exp_path + '_' + str(max_+i) + '.jpg', np.squeeze(image))
               self.experience_buffer.append(image)
             # todo make into a flag
-            exp_buffer_len = 10
+            exp_buffer_len = 10000
             if len(self.experience_buffer) > exp_buffer_len:
               self.experience_buffer = self.experience_buffer[len(self.experience_buffer) - exp_buffer_len:]
 
