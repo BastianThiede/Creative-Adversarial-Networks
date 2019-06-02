@@ -35,15 +35,15 @@ def CAN_loss(model):
     model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
     true_label = tf.random_uniform(tf.shape(model.D),.8, 1.2)
-    false_label = tf.random_uniform(tf.shape(model.D_), 0.0, 0.3)
+    false_label = tf.random_uniform(tf.shape(model.D_), 0.05, 0.35)
 
     model.d_loss_real = tf.reduce_mean(
       sigmoid_cross_entropy_with_logits(clip_tensor(model.D_logits),
-                                        tf.ones_like(model.D)))
+                                        true_label * tf.ones_like(model.D)))
 
     model.d_loss_fake = tf.reduce_mean(
       sigmoid_cross_entropy_with_logits(clip_tensor(model.D_logits_),
-                                        tf.zeros_like(model.D_)))
+                                        false_label * tf.ones_like(model.D_)))
 
     model.d_loss_class_real = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(logits=clip_tensor(model.D_c_logits),
