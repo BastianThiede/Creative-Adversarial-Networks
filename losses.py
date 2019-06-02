@@ -1,6 +1,5 @@
 import tensorflow as tf
 from ops import *
-from tensorflow.kerase.optimizers import SGD
 
 def clip_tensor(tens):
     return tens
