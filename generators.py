@@ -15,10 +15,10 @@ def vanilla_can(model, z, is_sampler=False):
         s_h64, s_w64 = conv_out_size_same(s_h32, 2), conv_out_size_same(s_w32, 2)#4/4 
 
         z_ = linear(z, model.gf_dim*s_h64*s_w64*16, 'g_h0_lin')
-        #tf.summary.histogram('z', z)
+        tf.summary.histogram('z', z)
         h0 = tf.reshape(z_, [-1, s_h64, s_w64, model.gf_dim*16])
 
-        #tf.summary.histogram('h0_pre_lrelu', h0)
+        tf.summary.histogram('h0_pre_lrelu', h0)
         h0 = lrelu(model.g_bn0(h0, train=is_sampler))
         print(h0)
         tf.summary.histogram('h0',h0)
@@ -27,20 +27,20 @@ def vanilla_can(model, z, is_sampler=False):
              h0, [-1, s_h32, s_w32, model.gf_dim*16], name='g_h1')
         h1 = lrelu(model.g_bn1(h1, train=is_sampler))
         print(h1)
-        #tf.summary.histogram('h1',h1)
+        tf.summary.histogram('h1',h1)
 
         h2 = model.upsample(
              h1, [-1, s_h16, s_w16, model.gf_dim*8], name='g_h2')
         h2 = lrelu(model.g_bn2(h2, train=is_sampler))
         print(h2)
-        #tf.summary.histogram('h2',h2)
+        tf.summary.histogram('h2',h2)
 
         h3 = model.upsample(
             h2, [-1, s_h8, s_w8, model.gf_dim*4], name='g_h3')
         h3 = lrelu(model.g_bn3(h3, train=is_sampler))
         print(h3)
 
-        #tf.summary.histogram('h3',h3)
+        tf.summary.histogram('h3',h3)
 
         h4 = model.upsample(
             h3, [-1, s_h4, s_w4, model.gf_dim*2], name='g_h4')
@@ -52,12 +52,12 @@ def vanilla_can(model, z, is_sampler=False):
             h4, [-1, s_h2, s_w2, model.gf_dim], name='g_h5')
         h5 = lrelu(model.g_bn5(h5, train=is_sampler))
         print(h5)
-        #tf.summary.histogram('h5',h5)
+        tf.summary.histogram('h5',h5)
 
         h6 = model.upsample(
             h5, [-1, s_h, s_w, model.c_dim], name='g_h6')
-        #tf.summary.histogram('h6',h6)
-        #tf.summary.histogram('h6_tanh', tf.nn.tanh(h6))
+        tf.summary.histogram('h6',h6)
+        tf.summary.histogram('h6_tanh', tf.nn.tanh(h6))
         print(h6)
         print('------------- MODEL STATS --------------')
 
