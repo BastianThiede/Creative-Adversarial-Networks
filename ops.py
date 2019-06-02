@@ -101,9 +101,11 @@ def resizeconv(input_, output_shape,
     
     resized = tf.image.resize_nearest_neighbor(input_,((output_shape[1]-1)*d_h + k_h-4, (output_shape[2]-1)*d_w + k_w-4))
     #The 4 is because of same padding in tf.nn.conv2d.
+    print(resized)
     w = tf.get_variable('w', [k_h, k_w, resized.get_shape()[-1], output_shape[-1]],
 		initializer=tf.truncated_normal_initializer(stddev=stddev))
     resconv = tf.nn.conv2d(resized, w, strides=[1, d_h, d_w, 1], padding='SAME')
+    print(resconv)
     biases = tf.get_variable('biases', output_shape[-1], initializer=tf.constant_initializer(0.0))
     
     return tf.nn.bias_add(resconv, biases)
