@@ -39,7 +39,7 @@ def CAN_loss(model):
     true_label = tf.random_uniform(tf.shape(model.D),.8, 1.2)
     false_label = tf.random_uniform(tf.shape(model.D_), 0.05, 0.35)
 
-    model.d_loss_real = - tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits,
+    model.d_loss_real = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits,
                                                                                  labels=tf.ones_like(model.D)))
     print(model.D_c_logits,'DC_LOGITS')
     model.d_loss_class_real = tf.reduce_mean(
@@ -47,7 +47,7 @@ def CAN_loss(model):
                                               labels=model.y))
 
 
-    model.d_loss_fake = - tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
+    model.d_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
                                                                                  labels=tf.zeros_like(model.D_)))
 
     model.d_loss = model.d_loss_real + model.d_loss_class_real + model.d_loss_fake
@@ -56,7 +56,7 @@ def CAN_loss(model):
         tf.nn.softmax_cross_entropy_with_logits_v2(logits=model.D_c_logits_,
                                                 labels=(1.0/model.y_dim) * tf.ones_like(model.D_c_)))
 
-    model.g_loss_fake = - tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
+    model.g_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
                                                                                  labels=tf.ones_like(model.D_)))
 
     model.g_loss = (model.g_loss_fake + model.lamb * model.g_loss_class_fake)
