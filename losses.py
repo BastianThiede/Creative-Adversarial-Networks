@@ -85,7 +85,7 @@ def CAN_loss(model):
     d_update = model.d_opt.minimize(model.d_loss, var_list=d_vars)
     g_update = model.g_opt.minimize(model.g_loss, var_list=g_vars)
 
-    return d_update, g_update, [model.d_loss, model.g_loss], [model.d_sum, model.g_sum],grad_summ_op
+    return d_update, g_update, [model.d_loss, model.g_loss], [model.d_sum, model.g_sum],grad_summ_op, model.D
 
 def WCAN_loss(model):
     pass

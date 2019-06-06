@@ -170,7 +170,7 @@ class DCGAN(object):
     if not self.wgan and self.can:
         self.discriminator = discriminators.vanilla_can
         self.generator = generators.vanilla_can
-        self.d_update, self.g_update, self.losses, self.sums, self.grad_summ_op = CAN_loss(self)
+        self.d_update, self.g_update, self.losses, self.sums, self.grad_summ_op ,self.d = CAN_loss(self)
     elif not self.wgan and not self.can:
         #TODO: write the regular gan stuff
         self.d_update, self.g_update, self.losses, self.sums = GAN_loss(self)
