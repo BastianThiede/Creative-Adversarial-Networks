@@ -42,7 +42,7 @@ def CAN_loss(model):
     model.d_loss_real = - tf.reduce_mean(tf.log(model.D))
     print(model.D_c_logits,'DC_LOGITS')
     model.d_loss_class_real = tf.reduce_mean(
-      tf.nn.softmax_cross_entropy_with_logits(logits=model.D_c_logits,
+      tf.nn.softmax_cross_entropy_with_logits_v2(logits=model.D_c_logits,
                                               labels=model.y))
 
 
@@ -51,7 +51,7 @@ def CAN_loss(model):
     model.d_loss = model.d_loss_real + model.d_loss_class_real + model.d_loss_fake
     # if classifier is set, then use the classifier, o/w use the clasification layers in the discriminator
     model.g_loss_class_fake = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(logits=model.D_c_logits_,
+        tf.nn.softmax_cross_entropy_with_logits_v2(logits=model.D_c_logits_,
                                                 labels=(1.0/model.y_dim)))
 
     model.g_loss_fake = - tf.reduce_mean(tf.log( 1 - model.D_))
