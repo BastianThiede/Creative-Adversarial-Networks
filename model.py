@@ -361,6 +361,7 @@ class DCGAN(object):
               self.z: batch_z
             })
             print(Counter(preds.argmax(axis=1)))
+            print(preds)
 
             print(batch_labels)
             errD_class_real = self.d_loss_class_real.eval({
