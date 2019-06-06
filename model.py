@@ -194,6 +194,7 @@ class DCGAN(object):
   def train(self, config):
 
     print('Training!')
+    print('Crop is', self.crop)
     try:
       tf.global_variables_initializer().run()
     except:
