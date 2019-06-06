@@ -52,7 +52,7 @@ def CAN_loss(model):
     # if classifier is set, then use the classifier, o/w use the clasification layers in the discriminator
     model.g_loss_class_fake = tf.reduce_mean(
         tf.nn.softmax_cross_entropy_with_logits(logits=model.D_c_logits_,
-                                                labels=(1.0/model.y_dim) * tf.ones_like(model.D_c_)))
+                                                labels=(1.0/model.y_dim)))
 
     model.g_loss_fake = - tf.reduce_mean(tf.log( 1 - model.D_))
 

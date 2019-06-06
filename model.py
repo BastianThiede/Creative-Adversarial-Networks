@@ -4,6 +4,7 @@ import time
 from glob import glob
 import tensorflow as tf
 import numpy as np
+from collections import Counter
 from six.moves import xrange
 from random import shuffle
 
@@ -102,6 +103,7 @@ class DCGAN(object):
       for i, elem in enumerate(path_list):
         print(elem[15:-1])
         self.label_dict[elem[15:-1]] = i
+        print(self.label_dict)
     else:
       self.data = glob(os.path.join("./data", self.dataset_name, self.input_fname_pattern))
       imreadImg = imread(self.data[0]);
@@ -306,6 +308,7 @@ class DCGAN(object):
               continue
           batch_labels = self.get_y(batch_files)
 
+        print(Counter(batch_labels.argmax(axis=1)))
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
@@ -349,7 +352,12 @@ class DCGAN(object):
                 self.y:batch_labels,
                 self.z: batch_z
             })
-
+            preds = self.d.eval({
+              self.inputs: batch_images,
+              self.y : batch_labels,
+              self.z: batch_z
+            })
+            print(Counter(preds.argmax(axis=1)))
 
 
             errG = self.g_loss.eval({
