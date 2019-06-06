@@ -307,7 +307,7 @@ class DCGAN(object):
               continue
           batch_labels = self.get_y(batch_files)
 
-        print(Counter(batch_labels.argmax(axis=1)))
+        print(Counter(batch_labels))
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
@@ -355,6 +355,13 @@ class DCGAN(object):
             errG = self.g_loss.eval({
                 self.z: batch_z
             })
+            preds = self.d.eval({
+              self.inputs: batch_images,
+              self.y: batch_labels,
+              self.z: batch_z
+            })
+            print(Counter(preds.argmax(axis=1)))
+
             print(batch_labels)
             errD_class_real = self.d_loss_class_real.eval({
                 self.inputs: batch_images,
