@@ -101,9 +101,8 @@ class DCGAN(object):
       path_list = glob('./data/wikiart/**/', recursive=True)[1:]
       print(path_list,'PATH_LIST')
       for i, elem in enumerate(path_list):
-        print(elem[15:-1])
         self.label_dict[elem[15:-1]] = i
-        print(self.label_dict)
+
     else:
       self.data = glob(os.path.join("./data", self.dataset_name, self.input_fname_pattern))
       imreadImg = imread(self.data[0]);
