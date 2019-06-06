@@ -88,7 +88,7 @@ class DCGAN(object):
     self.replay = replay
     self.input_fname_pattern = input_fname_pattern
     self.checkpoint_dir = checkpoint_dir
-    self.experience_flag = False
+    self.experience_flag = True
 
     if self.dataset_name == 'mnist':
       self.data_X, self.data_y = self.load_mnist()
