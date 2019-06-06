@@ -307,7 +307,7 @@ class DCGAN(object):
               continue
           batch_labels = self.get_y(batch_files)
         print(type(batch_labels))
-        print(Counter(batch_labels.argmax(axis=1)))
+        print(Counter(np.array(batch_labels).argmax(axis=1)))
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
