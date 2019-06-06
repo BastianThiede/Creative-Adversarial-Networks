@@ -46,7 +46,7 @@ def CAN_loss(model):
                                               labels=model.y))
 
 
-    model.d_loss_fake = - tf.reduce_mean(tf.log(1 - model.D_))
+    model.d_loss_fake = - tf.reduce_mean(tf.log(model.D_))
 
     model.d_loss = model.d_loss_real + model.d_loss_class_real + model.d_loss_fake
     # if classifier is set, then use the classifier, o/w use the clasification layers in the discriminator
