@@ -352,13 +352,6 @@ class DCGAN(object):
                 self.y:batch_labels,
                 self.z: batch_z
             })
-            preds = self.d.eval({
-              self.inputs: batch_images,
-              self.y : batch_labels,
-              self.z: batch_z
-            })
-            print(Counter(preds.argmax(axis=1)))
-
 
             errG = self.g_loss.eval({
                 self.z: batch_z
