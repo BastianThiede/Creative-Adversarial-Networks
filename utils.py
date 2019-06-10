@@ -11,6 +11,7 @@ import numpy as np
 from time import gmtime, strftime
 from six.moves import xrange
 from glob import glob
+import cv2
 import imageio
 
 import tensorflow as tf
@@ -41,9 +42,9 @@ def save_images(images, size, image_path):
 def imread(path, grayscale = False):
   try:
     if (grayscale):
-      return scipy.misc.imread(path, flatten = True).astype(np.float)
+      return cv2.imread(path, flatten = True).astype(np.float)
     else:
-      return scipy.misc.imread(path).astype(np.float)
+      return cv2.imread(path).astype(np.float)
   except(TypeError):
     print(path)
 #Do
@@ -89,11 +90,11 @@ def center_crop(x, crop_h, crop_w,
   return scipy.misc.imresize(
       x[j:j+crop_h, i:i+crop_w], [resize_h, resize_w])
 
-def transform(image, input_height, input_width, 
+def transform(image, input_height, input_width,
               resize_height=64, resize_width=64, crop=True):
   if crop:
     cropped_image = center_crop(
-      image, input_height, input_width, 
+      image, input_height, input_width,
       resize_height, resize_width)
   else:
     cropped_image = scipy.misc.imresize(image, [resize_height, resize_width])
@@ -169,7 +170,7 @@ def visualize(sess, dcgan, config, option):
         y_one_hot[np.arange(config.batch_size), y] = 1
 
         samples = sess.run(dcgan.sampler, feed_dict={dcgan.z: z_sample, dcgan.y: y_one_hot})
-        
+
       try:
         make_gif(samples, './samples/test_gif_%s.gif' % (idx))
       except:
@@ -213,3 +214,11 @@ def image_manifold_size(num_images):
   manifold_w = int(np.ceil(np.sqrt(num_images)))
   assert manifold_h * manifold_w == num_images
   return manifold_h, manifold_w
+
+if __name__ == '__main__':
+  print('Getting image!')
+  import time
+  start = time.time()
+  get_image("albert-gleizes_acrobats-1916.jpg",256,256,256,256)
+  end = (time.time() - start)
+  print ('Took : {.:%4f}'.format(end))
