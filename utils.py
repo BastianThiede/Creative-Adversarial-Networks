@@ -42,16 +42,11 @@ def save_images(images, size, image_path):
 def imread(path, grayscale = False):
   try:
     if (grayscale):
-      img = cv2.imread(path)
-      new_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-      return cv2.imread(new_img, flatten = True).astype(np.float)
+      return scipy.misc.imread(path, flatten = True).astype(np.float)
     else:
-      img = cv2.imread(path)
-      new_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-      return new_img.astype(np.float)
+      return scipy.misc.imread(path).astype(np.float)
   except(TypeError):
     print(path)
-
 #Do
 def test_images(path_glob):
     for path in path_glob:
