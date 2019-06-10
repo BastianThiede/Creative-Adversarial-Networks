@@ -42,9 +42,9 @@ def save_images(images, size, image_path):
 def imread(path, grayscale = False):
   try:
     if (grayscale):
-      return scipy.misc.imread(path, flatten = True).astype(np.float)
+      return cv2.imread(path, flatten = True).astype(np.float)
     else:
-      return scipy.misc.imread(path).astype(np.float)
+      return cv2.imread(path).astype(np.float)
   except(TypeError):
     print(path)
 #Do
