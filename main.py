@@ -72,16 +72,16 @@ def main(_):
                 FLAGS.input_height,
                 FLAGS.style_net_checkpoint is not None,
                 FLAGS.batch_size))
-  FLAGS.log_dir = log_dir
+  FLAGS.logging_dir = log_dir
 
   if FLAGS.checkpoint_dir is None:
-    FLAGS.checkpoint_dir = os.path.join(FLAGS.log_dir, 'checkpoint')
+    FLAGS.checkpoint_dir = os.path.join(FLAGS.logging_dir, 'checkpoint')
     FLAGS.use_default_checkpoint = True
   elif FLAGS.use_default_checkpoint:
     raise ValueError('`use_default_checkpoint` flag only works if you keep checkpoint_dir as None')
 
   if FLAGS.sample_dir is None:
-    FLAGS.sample_dir = os.path.join(FLAGS.log_dir, 'samples')
+    FLAGS.sample_dir = os.path.join(FLAGS.logging_dir, 'samples')
 
   if not os.path.exists(FLAGS.checkpoint_dir):
     os.makedirs(FLAGS.checkpoint_dir)
