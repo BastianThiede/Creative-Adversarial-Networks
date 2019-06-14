@@ -27,7 +27,7 @@ flags.DEFINE_integer("output_height", 64, "The size of the output images to prod
 flags.DEFINE_integer("output_width", None, "The size of the output images to produce. If None, same value as output_height [None]")
 flags.DEFINE_string("dataset", "celebA", "The name of dataset [celebA, mnist, lsun]")
 flags.DEFINE_string("input_fname_pattern", "*.jpg", "Glob pattern of filename of input images [*]")
-flags.DEFINE_string("logging_dir", 'logs', "Directory to store logs [logs]")
+flags.DEFINE_string("log_dir", 'logs', "Directory to store logs [logs]")
 flags.DEFINE_string("checkpoint_dir", None, "Directory name to save the checkpoints [<FLAGS.log_dir>/checkpoint]")
 flags.DEFINE_string("sample_dir", None, "Directory name to save the image samples [<FLAGS.log_dir>/samples]")
 flags.DEFINE_string("load_dir", None, "Directory that specifies checkpoint to load")
@@ -65,23 +65,23 @@ def main(_):
 
 
   # configure the log_dir to match the params
-  log_dir = os.path.join(FLAGS.logging_dir, "dataset={},isCan={},lr={},imsize={},hasStyleNet={},batch_size={}".format(
+  log_dir = os.path.join(FLAGS.log_dir, "dataset={},isCan={},lr={},imsize={},hasStyleNet={},batch_size={}".format(
                 FLAGS.dataset,
                 FLAGS.can,
                 FLAGS.learning_rate,
                 FLAGS.input_height,
                 FLAGS.style_net_checkpoint is not None,
                 FLAGS.batch_size))
-  FLAGS.logging_dir = log_dir
+  FLAGS.log_dir = log_dir
 
   if FLAGS.checkpoint_dir is None:
-    FLAGS.checkpoint_dir = os.path.join(FLAGS.logging_dir, 'checkpoint')
+    FLAGS.checkpoint_dir = os.path.join(FLAGS.log_dir, 'checkpoint')
     FLAGS.use_default_checkpoint = True
   elif FLAGS.use_default_checkpoint:
     raise ValueError('`use_default_checkpoint` flag only works if you keep checkpoint_dir as None')
 
   if FLAGS.sample_dir is None:
-    FLAGS.sample_dir = os.path.join(FLAGS.logging_dir, 'samples')
+    FLAGS.sample_dir = os.path.join(FLAGS.log_dir, 'samples')
 
   if not os.path.exists(FLAGS.checkpoint_dir):
     os.makedirs(FLAGS.checkpoint_dir)
