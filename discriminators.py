@@ -36,8 +36,9 @@ def vanilla_can(model, image, reuse=False):
         c_softmax = tf.nn.softmax(c_out)
         tf.summary.histogram('c_softmax', c_softmax)
         tf.summary.histogram('c_softmax_argmax', tf.math.argmax(c_softmax, axis=1))
+        summaries = tf.summary.merge_all()
 
-        return tf.nn.sigmoid(r_out), r_out, c_softmax, c_out
+        return tf.nn.sigmoid(r_out), r_out, c_softmax, c_out,summaries
 
 def wgan_cond(model, image, y, reuse=False):
             #no batchnorm for WGAN GP

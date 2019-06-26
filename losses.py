@@ -14,7 +14,7 @@ def CAN_loss(model):
     #builds optimizers and losses
 
     model.G                  = model.generator(model, model.z)
-    model.D, model.D_logits, model.D_c, model.D_c_logits     = model.discriminator(model,
+    model.D, model.D_logits, model.D_c, model.D_c_logits,summaries_d     = model.discriminator(model,
                                                               model.inputs, reuse=False)
     if model.experience_flag:
       try:
@@ -23,7 +23,7 @@ def CAN_loss(model):
         model.experience_selection = tf.convert_to_tensor(model.experience_buffer)
       model.G = tf.concat([model.G, model.experience_selection], axis=0)
 
-    model.D_, model.D_logits_, model.D_c_, model.D_c_logits_ = model.discriminator(model,
+    model.D_, model.D_logits_, model.D_c_, model.D_c_logits_,summaries_d_ = model.discriminator(model,
                                                               model.G, reuse=True)
     model.d_sum = histogram_summary("d", model.D)
     model.d__sum = histogram_summary("d_", model.D_)
@@ -73,7 +73,7 @@ def CAN_loss(model):
     model.g_loss_sum = scalar_summary("g_loss", model.g_loss)
     model.d_loss_sum = scalar_summary("d_loss", model.d_loss)
     model.d_sum = merge_summary(
-        [model.z_sum, model.d_sum, model.d_loss_real_sum,
+        [model.z_sum, model.d_sum, model.d_loss_real_sum,summaries_d, summaries_d_,
          sum_d_c_logits_,sum_d_c_logits,model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
          model.d_c_sum, model.d_c__sum])
     model.g_sum = merge_summary([model.z_sum, model.d__sum,
