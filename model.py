@@ -363,6 +363,8 @@ class DCGAN(object):
                 self.z: batch_z,
                 self.y:batch_labels
             })
+            print(labels[0,:])
+            print(labels[-1, :])
             print(labels.shape,'LABEL_CONCAT')
             disc_concat = self.disc_concat.eval({
               self.inputs: batch_images,
@@ -370,6 +372,8 @@ class DCGAN(object):
               self.y: batch_labels
             })
             print(disc_concat.shape,'DISC_CONC')
+            print(disc_concat[0, :])
+            print(disc_concat[-1, :])
 
             label_debug = self.label_debug.eval({
               self.inputs: batch_images,
