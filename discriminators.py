@@ -9,16 +9,14 @@ def vanilla_can(model, image, reuse=False):
             scope.reuse_variables()
         
         h0 = lrelu(conv2d(image, model.df_dim, k_h=4, k_w=4, name='d_h0_conv',padding='VALID'))
-        tf.summary.histogram('h0',h0)
+
 
         h1 = lrelu(model.d_bn1(conv2d(h0, model.df_dim*2, k_h=4, k_w=4, name='d_h1_conv', padding='VALID')))
-        tf.summary.histogram('h1',h1)
+
         h2 = lrelu(model.d_bn2(conv2d(h1, model.df_dim*4, k_h=4, k_w=4, name='d_h2_conv', padding='VALID')))
-        tf.summary.histogram('h2',h2)
         h3 = lrelu(model.d_bn3(conv2d(h2, model.df_dim*8, k_h=4, k_w=4, name='d_h3_conv', padding='VALID')))
-        tf.summary.histogram('h3',h3)
         h4 = lrelu(model.d_bn4(conv2d(h3, model.df_dim*16, k_h=4, k_w=4, name='d_h4_conv', padding='VALID')))
-        tf.summary.histogram('h4',h4)
+
         shape = np.product(h4.get_shape()[1:].as_list())
         h5 = tf.reshape(h4, [-1, shape])
         tf.summary.histogram('h5',h5)
