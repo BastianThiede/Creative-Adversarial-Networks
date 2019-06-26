@@ -363,14 +363,31 @@ class DCGAN(object):
                 self.z: batch_z,
                 self.y:batch_labels
             })
-            print(labels.shape)
+            print(labels.shape,'LABEL_CONCAT')
+            disc_concat = self.disc_concat.eval({
+              self.inputs: batch_images,
+              self.z: batch_z,
+              self.y: batch_labels
+            })
+            print(disc_concat.shape,'DISC_CONC')
+
+            label_debug = self.label_debug.eval({
+              self.inputs: batch_images,
+              self.z: batch_z,
+              self.y: batch_labels
+            })
+            print(label_debug.shape,'LABEL_DEBUG')
+
+
+
             d_logs = self.D_logits.eval({
                 self.inputs: batch_images,
                 self.z: batch_z,
                 self.y:batch_labels
             })
+            print(d_logs.shape,'D_LOGITS')
             print('----------------------------------------------------------')
-            print(d_logs.shape)
+
             print(batch_labels)
             errD_class_real = self.d_loss_class_real.eval({
                 self.inputs: batch_images,
