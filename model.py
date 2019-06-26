@@ -358,6 +358,12 @@ class DCGAN(object):
             })
             print(Counter(preds.argmax(axis=1)))
             print(preds.mean())
+            labels = self.labe_concat.eval({
+                self.inputs: batch_images,
+                self.z: batch_z,
+                self.y:batch_labels
+            })
+            print(labels)
 
             print(batch_labels)
             errD_class_real = self.d_loss_class_real.eval({
