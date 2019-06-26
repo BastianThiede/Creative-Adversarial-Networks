@@ -41,7 +41,9 @@ def CAN_loss(model):
 
     disc_concat = tf.concat([model.D_logits, model.D_logits_], axis=0)
     label_concat = tf.concat([tf.ones_like(model.D), tf.zeros_like(model.D_)],axis=0)
-
+    print(disc_concat)
+    print(label_concat)
+    model.labe_concat = label_concat
     model.d_loss_total = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=disc_concat,
                                                                              labels=label_concat))
 
