@@ -35,6 +35,7 @@ def vanilla_can(model, image, reuse=False):
         tf.summary.histogram('c_out', c_out)
         c_softmax = tf.nn.softmax(c_out)
         tf.summary.histogram('c_softmax', c_softmax)
+        tf.summary.histogram('c_softmax_argmax', tf.math.argmax(c_softmax, axis=1))
 
         return tf.nn.sigmoid(r_out), r_out, c_softmax, c_out
 
