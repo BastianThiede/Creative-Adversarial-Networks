@@ -156,7 +156,7 @@ class DCGAN(object):
     self.z = tf.placeholder(
       tf.float32, [None, self.z_dim], name='z')
     self.z_sum = histogram_summary("z", self.z)
-
+    print(self.wgan, self.can)
     if self.wgan and not self.can:
         self.discriminator = discriminators.dcwgan_cond
         self.generator = generators.dcgan_cond
