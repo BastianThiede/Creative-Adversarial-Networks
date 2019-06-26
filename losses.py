@@ -73,7 +73,7 @@ def CAN_loss(model):
     model.g_loss_sum = scalar_summary("g_loss", model.g_loss)
     model.d_loss_sum = scalar_summary("d_loss", model.d_loss)
     model.d_sum = merge_summary(
-        [ model.d_sum, model.d_loss_real_sum,summaries_d, summaries_d_,
+        [ model.d_sum, model.d_loss_real_sum,summaries_d,
          sum_d_c_logits_,sum_d_c_logits,model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
          model.d_c_sum, model.d_c__sum])
     model.g_sum = merge_summary([model.z_sum, model.d__sum,
