@@ -34,8 +34,8 @@ def CAN_loss(model):
     model.G_sum = image_summary("G", model.G)
     model.img_sum = image_summary("Inpts", model.inputs)
     mean, variance = tf.nn.moments(model.G,axes=[1])
-    variance = tf.reshape(variance,[-1,256,256,3])
-    model.img_std = image_summary('STD_GEN', variance)
+    model.mean_debug = mean
+    model.variance_debug = variance
 
     correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
     model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))

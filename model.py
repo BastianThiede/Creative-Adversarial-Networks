@@ -392,7 +392,19 @@ class DCGAN(object):
             })
             print(label_debug.shape,'LABEL_DEBUG')
 
+            variance_debug = self.variance_debug.eval({
+              self.inputs: batch_images,
+              self.z: batch_z,
+              self.y: batch_labels
+            })
+            print(variance_debug, 'variance')
 
+            mean_debug = self.mean_debug.eval({
+              self.inputs: batch_images,
+              self.z: batch_z,
+              self.y: batch_labels
+            })
+            print(mean_debug, 'variance')
 
             d_logs = self.D_logits.eval({
                 self.inputs: batch_images,
