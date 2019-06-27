@@ -37,7 +37,7 @@ def CAN_loss(model):
     model.mean_debug = mean
     model.variance_debug = variance
     model.img_mean = image_summary('img_mean', tf.reshape(mean,[-1,128,256,3]))
-    model.img_var = image_summary('img_var', tf.reshape(mean, [-1, 128, 256, 3]))
+    model.img_var = image_summary('img_var', tf.reshape(variance, [-1, 128, 256, 3]))
 
     correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
     model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
