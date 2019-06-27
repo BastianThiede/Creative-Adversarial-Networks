@@ -1,5 +1,6 @@
 from __future__ import division
 import os
+import psutil
 import time
 from glob import glob
 import tensorflow as tf
@@ -285,6 +286,8 @@ class DCGAN(object):
       print('Batch idx: {} data-length: {}'.format(batch_idxs,len(self.data)))
       b_idx = list(xrange(0, batch_idxs))
       for idx in b_idx:
+        print('Current memroy: {}'.format(psutil.virtual_memory()))
+
         load_time_start = time.time()
         self.experience_flag = False
         if config.dataset == 'mnist':
@@ -325,7 +328,7 @@ class DCGAN(object):
               self.y: batch_labels,
             })
           self.writer.add_summary(summary_str,counter)
-        #Update G: don't need labels or inputs
+          #Update G: don't need labels or inputs
           merged = tf.summary.merge_all()
           #Generator has a lot of trouble catching up to discriminator
           # Training G multiple times may reduce the gap
@@ -494,6 +497,7 @@ class DCGAN(object):
         if np.mod(counter, config.sample_itr) == 1:
 
           if config.dataset == 'mnist' or config.dataset == 'wikiart':
+            print("Saving images!")
             samples = self.sess.run(
               self.sampler,
               feed_dict={
@@ -520,6 +524,7 @@ class DCGAN(object):
               print("one pic error!...")
 
         if np.mod(counter, config.save_itr) == 2:
+          print('SAVING!!!!')
           self.save(config.checkpoint_dir, counter, config)
 
 
