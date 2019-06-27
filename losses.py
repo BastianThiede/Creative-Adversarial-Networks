@@ -33,6 +33,8 @@ def CAN_loss(model):
     sum_d_c_logits_ = histogram_summary('D_c_logits_', model.D_c_logits_)
     model.G_sum = image_summary("G", model.G)
     model.img_sum = image_summary("Inpts", model.inputs)
+    mean, variance = tf.nn.moments(model.G)
+    model.img_std = image_summary('STD_GEN', variance)
 
     correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
     model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -77,7 +79,7 @@ def CAN_loss(model):
         [ model.d_sum, model.d_loss_real_sum,
          sum_d_c_logits_,sum_d_c_logits, model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
          model.d_c_sum, model.d_c__sum])
-    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,
+    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,model.img_std,
       model.G_sum, model.g_loss_sum])
 
     model.g_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
