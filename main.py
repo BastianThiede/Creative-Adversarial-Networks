@@ -116,7 +116,7 @@ def main(_):
       lamb = FLAGS.lambda_val,
       dataset_name=FLAGS.dataset,
       input_fname_pattern=FLAGS.input_fname_pattern,
-      crop=FLAGS.crop,
+      crop=False,
       checkpoint_dir=FLAGS.checkpoint_dir,
       sample_dir=FLAGS.sample_dir,
       wgan=FLAGS.wgan,
