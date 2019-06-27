@@ -327,15 +327,19 @@ class DCGAN(object):
           self.writer.add_summary(summary_str,counter)
         #Update G: don't need labels or inputs
           merged = tf.summary.merge_all()
-          _, summary_str  = self.sess.run([self.g_update, self.sums[1]],
-            feed_dict={
-              self.inputs: batch_images,
-              self.z: batch_z,
-              self.y: batch_labels,
-            })
+          # Generator has a lot of trouble catching up to discriminator
+          # Training G multiple times may reduce the gap
+          for i in range(3):
+            _, summary_str  = self.sess.run([self.g_update, self.sums[1]],
+              feed_dict={
+                self.z: batch_z,
+              })
+            batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
+              .astype(np.float32)
+            batch_z /= np.linalg.norm(batch_z, axis=0)
 
-          #self.writer.add_summary(details, counter)
-          self.writer.add_summary(summary_str, counter)
+            #self.writer.add_summary(details, counter)
+            self.writer.add_summary(summary_str, counter)
           accuracy = self.accuracy.eval({
             self.inputs: batch_images,
             self.y: batch_labels
