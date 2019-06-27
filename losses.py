@@ -36,6 +36,8 @@ def CAN_loss(model):
     mean, variance = tf.nn.moments(model.G,axes=[1])
     model.mean_debug = mean
     model.variance_debug = variance
+    model.img_mean = image_summary('img_mean', tf.reshape(mean,[-1,128,256,3]))
+    model.img_var = image_summary('img_var', tf.reshape(mean, [-1, 128, 256, 3]))
 
     correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
     model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -80,7 +82,7 @@ def CAN_loss(model):
         [ model.d_sum, model.d_loss_real_sum,
          sum_d_c_logits_,sum_d_c_logits, model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
          model.d_c_sum, model.d_c__sum])
-    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,
+    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,model.img_mean,model.img_var,
       model.G_sum, model.g_loss_sum])
 
     model.g_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
