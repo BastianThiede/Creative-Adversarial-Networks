@@ -458,8 +458,6 @@ class DCGAN(object):
 
         counter += 1
         if self.can:
-          if np.mod(counter, 50) == 1:
-            self.save(config.checkpoint_dir, counter, config)
           print("Epoch: [%2d] [%4d/%4d] time: %4.4f file_load: %4.4f train_time: %4.4f" \
             % (epoch, idx, batch_idxs,
               time.time() - start_time,file_load_time,train_time))
@@ -487,7 +485,7 @@ class DCGAN(object):
               #scipy.misc.imsave(exp_path + '_' + str(max_+i) + '.jpg', np.squeeze(image))
               self.experience_buffer.append(image)
             # todo make into a flag
-            exp_buffer_len = 10000
+            exp_buffer_len = 200
             if len(self.experience_buffer) > exp_buffer_len:
               print('RESIZING!')
               self.experience_buffer = self.experience_buffer[len(self.experience_buffer) - exp_buffer_len:]
