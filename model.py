@@ -535,7 +535,7 @@ class DCGAN(object):
             except:
               print("one pic error!...")
 
-        if np.mod(counter, config.save_itr/2) == 2:
+        if np.mod(counter, config.save_itr * 6) == 2:
           print('SAVING!!!!')
           self.save(config.checkpoint_dir, counter, config)
 
