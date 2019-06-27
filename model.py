@@ -332,7 +332,7 @@ class DCGAN(object):
           merged = tf.summary.merge_all()
           #Generator has a lot of trouble catching up to discriminator
           # Training G multiple times may reduce the gap
-          for i in range(2):
+          for i in range(4):
             _, summary_str  = self.sess.run([self.g_update, self.sums[1]],
               feed_dict={
                 self.inputs: batch_images,
