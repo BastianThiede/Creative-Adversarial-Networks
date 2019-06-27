@@ -33,7 +33,7 @@ def CAN_loss(model):
     sum_d_c_logits_ = histogram_summary('D_c_logits_', model.D_c_logits_)
     model.G_sum = image_summary("G", model.G)
     model.img_sum = image_summary("Inpts", model.inputs)
-    mean, variance = tf.nn.moments(model.G)
+    mean, variance = tf.nn.moments(model.G,axes=[1])
     variance = tf.reshape(variance,[-1,256,256,1])
     model.img_std = image_summary('STD_GEN', variance)
 
