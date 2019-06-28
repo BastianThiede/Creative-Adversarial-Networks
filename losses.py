@@ -35,7 +35,9 @@ def CAN_loss(model):
     model.img_sum = image_summary("Inpts", model.inputs)
     mean, variance = tf.nn.moments(model.G,axes=[1])
     grads_wrt_inpt = tf.gradients(model.D_logits, model.inputs)
+    grads_wrt_gen_inpt = tf.gradients(model.D_logits_,model.G)
     model.grad_sum = image_summary('grad_wrt_inpt', grads_wrt_inpt[0])
+    model.grad_gen_sum = image_summary('G_grads_inpt',grads_wrt_gen_inpt[0])
     model.grad_debug = grads_wrt_inpt
     model.mean_debug = mean
     model.variance_debug = variance
