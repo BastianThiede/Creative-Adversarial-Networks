@@ -290,7 +290,7 @@ class DCGAN(object):
       print('Batch idx: {} data-length: {}'.format(batch_idxs,len(self.data)))
       b_idx = list(xrange(0, batch_idxs))
       for idx in b_idx:
-        print('Current memroy: {}'.format(psutil.virtual_memory()))
+        #print('Current memroy: {}'.format(psutil.virtual_memory()))
 
         load_time_start = time.time()
         self.experience_flag = False
@@ -315,8 +315,8 @@ class DCGAN(object):
             except ValueError:
               continue
           batch_labels = self.get_y(batch_files)
-        print(type(batch_labels))
-        print(Counter(np.array(batch_labels).argmax(axis=1)))
+        #print(type(batch_labels))
+        #print(Counter(np.array(batch_labels).argmax(axis=1)))
         batch_z = np.random.normal(0, 1, [config.batch_size, self.z_dim]) \
               .astype(np.float32)
         batch_z /= np.linalg.norm(batch_z, axis=0)
