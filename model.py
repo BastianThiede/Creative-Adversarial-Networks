@@ -17,6 +17,7 @@ from ops import *
 from utils import *
 from losses import *
 from memory_profiler import profile
+import gc
 
 class DCGAN(object):
   def __init__(self, sess, input_height=108, input_width=108, crop=False,
@@ -603,10 +604,11 @@ class DCGAN(object):
     if not os.path.exists(checkpoint_dir):
       os.makedirs(checkpoint_dir)
 
-    self.saver.save(self.sess,
+    tf.train.Saver().save(self.sess,
             os.path.join(checkpoint_dir, model_name),
             global_step=step,
             write_meta_graph=False)
+    gc.collect()
     if config.use_s3:
       import aws
       s3_dir = checkpoint_dir
