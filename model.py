@@ -594,6 +594,8 @@ class DCGAN(object):
         self.output_height, self.output_width)
 
   def save(self, checkpoint_dir, step, config):
+    print('Current memroy before save: {}'.format(psutil.virtual_memory()))
+
     model_name = "DCGAN.model"
     if not config.use_default_checkpoint:
       checkpoint_dir = os.path.join(checkpoint_dir, self.model_dir)
@@ -611,7 +613,7 @@ class DCGAN(object):
       aws.upload_path(checkpoint_dir, config.s3_bucket, s3_dir)
       print('uploading log')
       aws.upload_path(self.log_dir, config.s3_bucket, self.log_dir, certain_upload=True)
-
+    print('Current memroy after save: {}'.format(psutil.virtual_memory()))
 
   def load_specific(self, checkpoint_dir):
     ''' like loading but takes in a directory directly'''
