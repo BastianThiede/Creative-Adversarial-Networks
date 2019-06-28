@@ -42,8 +42,8 @@ def CAN_loss(model):
     correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
     model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-    true_label = tf.random_uniform(tf.shape(model.D), .9, 1.0)
-    false_label = tf.random_uniform(tf.shape(model.D_), 0.00, 0.1)
+    true_label = tf.random_uniform(tf.shape(model.D), .7, 1.2)
+    false_label = tf.random_uniform(tf.shape(model.D_), 0.00, 0.3)
 
     disc_concat = tf.concat([model.D_logits, model.D_logits_], axis=0)
     label_concat = tf.concat([tf.ones_like(model.D) * true_label,
