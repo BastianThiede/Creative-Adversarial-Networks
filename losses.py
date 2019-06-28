@@ -35,7 +35,7 @@ def CAN_loss(model):
     model.img_sum = image_summary("Inpts", model.inputs)
     mean, variance = tf.nn.moments(model.G,axes=[1])
     grads_wrt_inpt = tf.gradients(model.D_logits, model.inputs)
-    print(grads_wrt_inpt, len(grads_wrt_inpt),grads_wrt_inpt[0].shape)
+    model.grad_sum = image_summary('grad_wrt_inpt', grads_wrt_inpt[0])
     model.grad_debug = grads_wrt_inpt
     model.mean_debug = mean
     model.variance_debug = variance
@@ -86,7 +86,7 @@ def CAN_loss(model):
         [ model.d_sum, model.d_loss_real_sum,
          sum_d_c_logits_,sum_d_c_logits, model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
          model.d_c_sum, model.d_c__sum])
-    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,model.img_mean,model.img_var,
+    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,model.img_mean,model.img_var,model.grad_sum,
       model.G_sum, model.g_loss_sum])
 
     model.g_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)
