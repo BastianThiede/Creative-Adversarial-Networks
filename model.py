@@ -195,6 +195,7 @@ class DCGAN(object):
   def train(self, config):
 
     print('Training!')
+    print(config.save_itr,'save_iter')
     self.crop = False
     print('Crop is', self.crop)
     try:
@@ -535,7 +536,7 @@ class DCGAN(object):
             except:
               print("one pic error!...")
 
-        if np.mod(counter, config.save_itr * 6) == 2:
+        if np.mod(counter, config.save_itr) == 2:
           print('SAVING!!!!')
           self.save(config.checkpoint_dir, counter, config)
 
