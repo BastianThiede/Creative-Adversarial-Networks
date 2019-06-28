@@ -410,6 +410,13 @@ class DCGAN(object):
             })
             print(mean_debug.shape,'mean')
 
+            grad_debug = self.grad_debug.eval({
+              self.inputs: batch_images,
+              self.z: batch_z,
+              self.y: batch_labels
+            })
+            print(grad_debug.shape, 'grad_debug')
+
             d_logs = self.D_logits.eval({
                 self.inputs: batch_images,
                 self.z: batch_z,
