@@ -16,6 +16,7 @@ import discriminators
 from ops import *
 from utils import *
 from losses import *
+from memory_profiler import profile
 
 class DCGAN(object):
   def __init__(self, sess, input_height=108, input_width=108, crop=False,
@@ -192,6 +193,7 @@ class DCGAN(object):
       self.style_net_saver = tf.train.Saver(var_list=style_net_vars)
     else:
       self.saver=tf.train.Saver()
+  @profile
   def train(self, config):
 
     print('Training!')
