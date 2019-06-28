@@ -603,10 +603,9 @@ class DCGAN(object):
     if not os.path.exists(checkpoint_dir):
       os.makedirs(checkpoint_dir)
 
-    self.saver.save(self.sess,
+    tf.train.Saver().save(self.sess,
             os.path.join(checkpoint_dir, model_name),
             global_step=step)
-    self.saver = tf.train.Saver()
     if config.use_s3:
       import aws
       s3_dir = checkpoint_dir
