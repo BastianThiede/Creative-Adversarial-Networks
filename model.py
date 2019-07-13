@@ -601,12 +601,12 @@ class DCGAN(object):
 
     if not os.path.exists(checkpoint_dir):
       os.makedirs(checkpoint_dir)
+    tf.summary.FileWriterCache.clear()
 
     tf.train.Saver().save(self.sess,
             os.path.join(checkpoint_dir, model_name),
             global_step=step,
             write_meta_graph=False)
-    gc.collect()
     if config.use_s3:
       import aws
       s3_dir = checkpoint_dir
