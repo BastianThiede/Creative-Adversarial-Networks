@@ -27,7 +27,7 @@ def vanilla_can(model, image, reuse=False):
         #fully connected layers to classify the image into the different styles.
         summaries = tf.summary.merge_all()
 
-        return tf.nn.sigmoid(r_out), r_out, c_softmax, c_out,summaries
+        return tf.nn.sigmoid(r_out), r_out,summaries
 
 def wgan_cond(model, image, y, reuse=False):
             #no batchnorm for WGAN GP
