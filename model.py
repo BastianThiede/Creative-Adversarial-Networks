@@ -352,7 +352,7 @@ class DCGAN(object):
             self.y: batch_labels
           })
           train_time = time.time() - train_time_start
-          if False:
+          if True:
             #do we need self.y for these two?
             errD_tot = self.d_loss_total.eval({
                 self.inputs: batch_images,
@@ -375,17 +375,18 @@ class DCGAN(object):
                 self.z: batch_z,
                 self.y:batch_labels
             })
-            print(labels[0,:])
-            print(labels[-1, :])
-            print(labels.shape,'LABEL_CONCAT')
+
+
             disc_concat = self.disc_concat.eval({
               self.inputs: batch_images,
               self.z: batch_z,
               self.y: batch_labels
             })
-            print(disc_concat.shape,'DISC_CONC')
+            print(disc_concat.shape, 'CONC')
             print(disc_concat[0, :])
+            print(labels[0, :])
             print(disc_concat[-1, :])
+            print(labels[-1, :])
 
             label_debug = self.label_debug.eval({
               self.inputs: batch_images,
@@ -425,6 +426,17 @@ class DCGAN(object):
                 self.inputs: batch_images,
                 self.z: batch_z
             })
+
+            print('Evaluation_round! '
+                  'Accuracy-discriminator: {} Discriminator-loss-total: {}'
+                  'Generator-loss-total: {}, Pred-mean: {}'
+                  'Err-Discriminiator-class-real: {}'
+                  'Err-Discriminiator-class-fake: {}'.format(accuracy,
+                                                             errD_tot,
+                                                             errG,
+                                                             preds.mean(),
+                                                             errD_class_real,
+                                                             errG_class_fake))
 
 
 
