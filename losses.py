@@ -14,7 +14,7 @@ def CAN_loss(model):
     #builds optimizers and losses
 
     model.G                  = model.generator(model, model.z)
-    model.D, model.D_logits, model.D_c, model.D_c_logits,summaries_d     = model.discriminator(model,
+    model.D, model.D_logits, summaries_d     = model.discriminator(model,
                                                               model.inputs, reuse=False)
     if model.experience_flag:
       try:
@@ -23,14 +23,10 @@ def CAN_loss(model):
         model.experience_selection = tf.convert_to_tensor(model.experience_buffer)
       model.G = tf.concat([model.G, model.experience_selection], axis=0)
 
-    model.D_, model.D_logits_, model.D_c_, model.D_c_logits_,summaries_d_ = model.discriminator(model,
+    model.D_, model.D_logits_, summaries_d_ = model.discriminator(model,
                                                               model.G, reuse=True)
     model.d_sum = histogram_summary("d", model.D)
     model.d__sum = histogram_summary("d_", model.D_)
-    model.d_c_sum = histogram_summary("d_c", model.D_c)
-    model.d_c__sum = histogram_summary("d_c_", model.D_c_)
-    sum_d_c_logits = histogram_summary('D_c_logits', model.D_c_logits)
-    sum_d_c_logits_ = histogram_summary('D_c_logits_', model.D_c_logits_)
     model.G_sum = image_summary("G", model.G)
     model.img_sum = image_summary("Inpts", model.inputs)
     mean, variance = tf.nn.moments(model.G,axes=[1])
@@ -44,8 +40,7 @@ def CAN_loss(model):
     model.img_mean = image_summary('img_mean', tf.reshape(mean,[-1,128,256,3]))
     model.img_var = image_summary('img_var', tf.reshape(variance, [-1, 128, 256, 3]))
 
-    correct_prediction = tf.equal(tf.argmax(model.y,1), tf.argmax(model.D_c,1))
-    model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
 
     true_label = tf.random_uniform(tf.shape(model.D), .7, 1.2)
     false_label = tf.random_uniform(tf.shape(model.D_), 0.00, 0.3)
@@ -58,26 +53,24 @@ def CAN_loss(model):
     print(label_concat)
     model.labe_concat = label_concat
     model.disc_concat = disc_concat
+
+    correct_prediction = tf.equal(tf.argmax(model.disc_concat, 1), tf.argmax(model.label_concat, 1))
+    model.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
+
     model.d_loss_total = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_concat,
                                                                              labels=label_concat))
 
-    print(model.D_c_logits,'DC_LOGITS')
-    model.d_loss_class_real = tf.reduce_mean(
-      tf.nn.softmax_cross_entropy_with_logits_v2(logits=model.D_c_logits,
-                                              labels=model.y))
 
 
 
-    model.d_loss = model.d_loss_class_real + model.d_loss_total
+    model.d_loss = model.d_loss_total
     # if classifier is set, then use the classifier, o/w use the clasification layers in the discriminator
-    model.g_loss_class_fake = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits_v2(logits=model.D_c_logits_,
-                                                labels=(1.0/model.y_dim) * tf.ones_like(model.D_c_)))
 
-    model.g_loss_fake = model.lamb * tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
+    model.g_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
                                                                                  labels=tf.ones_like(model.D_)))
 
-    model.g_loss = (model.g_loss_fake + model.g_loss_class_fake)
+    model.g_loss = (model.g_loss_fake + model.lamb * model.g_loss_class_fake)
 
     model.d_loss_real_sum       = scalar_summary("d_loss_complete", model.d_loss_total)
     model.d_loss_class_real_sum = scalar_summary("d_loss_class_real", model.d_loss_class_real)
@@ -86,9 +79,9 @@ def CAN_loss(model):
     model.d_loss_sum = scalar_summary("d_loss", model.d_loss)
     model.d_sum = merge_summary(
         [ model.d_sum, model.d_loss_real_sum,
-         sum_d_c_logits_,sum_d_c_logits, model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum,
-         model.d_c_sum, model.d_c__sum])
-    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,model.img_mean,model.img_var,model.grad_sum,model.grad_gen_sum,
+          model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum])
+    model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,
+                                 model.img_mean,model.img_var,model.grad_sum,model.grad_gen_sum,
       model.G_sum, model.g_loss_sum])
 
     model.g_opt = tf.train.AdamOptimizer(learning_rate=model.learning_rate, beta1=0.5)

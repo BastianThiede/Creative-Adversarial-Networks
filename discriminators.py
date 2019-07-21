@@ -25,15 +25,6 @@ def vanilla_can(model, image, reuse=False):
         tf.summary.histogram('r_out', r_out)
 
         #fully connected layers to classify the image into the different styles.
-        h6 = lrelu(linear(h5, 1024, 'd_h6_lin'))
-        tf.summary.histogram('h6',h6)
-        h7 = lrelu(linear(h6, 512, 'd_h7_lin'))
-        tf.summary.histogram('h7',h7)
-        c_out = linear(h7, model.y_dim, 'd_co_lin')
-        tf.summary.histogram('c_out', c_out)
-        c_softmax = tf.nn.softmax(c_out)
-        tf.summary.histogram('c_softmax', c_softmax)
-        tf.summary.histogram('c_softmax_argmax', tf.math.argmax(c_softmax, axis=1))
         summaries = tf.summary.merge_all()
 
         return tf.nn.sigmoid(r_out), r_out, c_softmax, c_out,summaries
