@@ -51,8 +51,8 @@ def CAN_loss(model):
     false_label = tf.random_uniform(tf.shape(model.D_), 0.00, 0.3)
 
     disc_concat = tf.concat([model.D_logits, model.D_logits_], axis=0)
-    label_concat = tf.concat([tf.ones_like(model.D) * true_label,
-                              tf.zeros_like(model.D_) * false_label],axis=0)
+    label_concat = tf.concat([tf.ones_like(model.D),
+                              tf.zeros_like(model.D_)],axis=0)
     model.label_debug = tf.ones_like(model.D)
     print(disc_concat)
     print(label_concat)
