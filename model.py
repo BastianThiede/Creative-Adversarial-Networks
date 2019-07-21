@@ -349,7 +349,8 @@ class DCGAN(object):
           self.writer.add_summary(summary_str, counter)
           accuracy = self.accuracy.eval({
             self.inputs: batch_images,
-            self.y: batch_labels
+            self.y: batch_labels,
+            self.z: batch_z
           })
           train_time = time.time() - train_time_start
           if True:
