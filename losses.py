@@ -74,10 +74,10 @@ def CAN_loss(model):
         tf.nn.softmax_cross_entropy_with_logits_v2(logits=model.D_c_logits_,
                                                 labels=(1.0/model.y_dim) * tf.ones_like(model.D_c_)))
 
-    model.g_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
+    model.g_loss_fake = model.lamb * tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
                                                                                  labels=tf.ones_like(model.D_)))
 
-    model.g_loss = (model.g_loss_fake + model.lamb * model.g_loss_class_fake)
+    model.g_loss = (model.g_loss_fake + model.g_loss_class_fake)
 
     model.d_loss_real_sum       = scalar_summary("d_loss_complete", model.d_loss_total)
     model.d_loss_class_real_sum = scalar_summary("d_loss_class_real", model.d_loss_class_real)
