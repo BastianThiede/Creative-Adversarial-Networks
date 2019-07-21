@@ -70,16 +70,14 @@ def CAN_loss(model):
     model.g_loss_fake = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=model.D_logits_,
                                                                                  labels=tf.ones_like(model.D_)))
 
-    model.g_loss = (model.g_loss_fake + model.lamb * model.g_loss_class_fake)
+    model.g_loss = (model.g_loss_fake)
 
     model.d_loss_real_sum       = scalar_summary("d_loss_complete", model.d_loss_total)
-    model.d_loss_class_real_sum = scalar_summary("d_loss_class_real", model.d_loss_class_real)
-    model.g_loss_class_fake_sum = scalar_summary("g_loss_class_fake", model.g_loss_class_fake)
     model.g_loss_sum = scalar_summary("g_loss", model.g_loss)
     model.d_loss_sum = scalar_summary("d_loss", model.d_loss)
     model.d_sum = merge_summary(
         [ model.d_sum, model.d_loss_real_sum,
-          model.d_loss_sum, model.d_loss_class_real_sum, model.g_loss_class_fake_sum])
+          model.d_loss_sum])
     model.g_sum = merge_summary([model.z_sum, model.d__sum,model.img_sum,
                                  model.img_mean,model.img_var,model.grad_sum,model.grad_gen_sum,
       model.G_sum, model.g_loss_sum])
