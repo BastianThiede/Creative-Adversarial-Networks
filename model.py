@@ -419,14 +419,6 @@ class DCGAN(object):
             print('----------------------------------------------------------')
 
             print(batch_labels)
-            errD_class_real = self.d_loss_class_real.eval({
-                self.inputs: batch_images,
-                self.y: batch_labels
-            })
-            errG_class_fake = self.g_loss_class_fake.eval({
-                self.inputs: batch_images,
-                self.z: batch_z
-            })
 
             print('Evaluation_round! '
                   'Accuracy-discriminator: {} Discriminator-loss-total: {}'
