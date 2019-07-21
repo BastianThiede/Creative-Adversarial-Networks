@@ -422,14 +422,10 @@ class DCGAN(object):
 
             print('Evaluation_round! '
                   'Accuracy-discriminator: {} Discriminator-loss-total: {}'
-                  'Generator-loss-total: {}, Pred-mean: {}'
-                  'Err-Discriminiator-class-real: {}'
-                  'Err-Discriminiator-class-fake: {}'.format(accuracy,
+                  'Generator-loss-total: {}, Pred-mean: {}'.format(accuracy,
                                                              errD_tot,
                                                              errG,
-                                                             preds.mean(),
-                                                             errD_class_real,
-                                                             errG_class_fake))
+                                                             preds.mean()))
 
 
 
