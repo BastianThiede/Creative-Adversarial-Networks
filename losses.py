@@ -51,7 +51,7 @@ def CAN_loss(model):
     model.label_debug = tf.ones_like(model.D)
     print(disc_concat)
     print(label_concat)
-    model.labe_concat = label_concat
+    model.label_concat = label_concat
     model.disc_concat = disc_concat
 
     correct_prediction = tf.equal(tf.argmax(model.disc_concat, 1), tf.argmax(model.label_concat, 1))
